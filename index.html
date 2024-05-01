@@ -56,7 +56,7 @@ const holdings = {
         // Toplam portföy değerini güncelle
         function updatePortfolioValue(value) {
             const portfolioValueElement = document.getElementById('portfolio-value');
-            //portfolioValueElement.textContent = `Toplam portföy değeri: ${value.toFixed(2)} USDT`;
+            portfolioValueElement.textContent = `Toplam portföy değeri: ${value.toFixed(2)} USDT`;
 
             // Zararı hesapla ve yazdır
             const lossPercentage = ((value - spentMoney) / spentMoney) * 100;
