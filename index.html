@@ -62,7 +62,7 @@
             portfolioValueElement.textContent = `Toplam portföy değeri: ${value.toFixed(4)} USDT`;
 
             // Zararı hesapla ve yazdır
-            const lossPercentage = ((value - spentMoney) / spentMoney) * 100;
+            const lossPercentage = ((spentMoney * 100) / value) - 100;
             portfolioValueElement.insertAdjacentHTML('afterend', `<p>Zarar yüzdesi: ${lossPercentage.toFixed(4)}%</p>`);
         }
 
