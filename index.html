@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Binance</title>
+    <title>Portföy Değeri</title>
 </head>
 <body>
-    <h1>Binance</h1>
-    <p id="portfolio-value">Şinşuku beyin portfoyu</p>
+    <h1>Portföy Değeri ve Varlık Fiyatları</h1>
+    <p id="portfolio-value">Portföy değeri hesaplanıyor...</p>
+    <p id="asset-prices">Varlık fiyatları bekleniyor...</p>
 
     <script>
         // Binance API endpoint'leri
@@ -19,7 +20,7 @@
         };
 
         // Eldeki adetler
-const holdings = {
+		const holdings = {
             AVAX: 87,
             PDA: 67188,
             PYR: 1259,
@@ -47,6 +48,8 @@ const holdings = {
                 const holdingValue = holdings[symbol] * price;
                 totalValue += holdingValue;
                 console.log(`${symbol} için değer: ${holdingValue.toFixed(2)} USDT`);
+                // Fiyatları HTML'e yazdır
+                document.getElementById('asset-prices').innerHTML += `<p>${symbol} fiyatı: ${price.toFixed(2)} USDT</p>`;
             }
 
             // Toplam portföy değerini güncelle
