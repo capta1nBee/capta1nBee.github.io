@@ -1,1 +1,70 @@
-Hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binance</title>
+</head>
+<body>
+    <h1>Binance</h1>
+    <p id="portfolio-value">Şinşuku beyin portfoyu</p>
+
+    <script>
+        // Binance API endpoint'leri
+        const endpoints = {
+            AVAX: 'https://api.binance.com/api/v3/ticker/price?symbol=AVAXUSDT',
+            PDA: 'https://api.binance.com/api/v3/ticker/price?symbol=PDAUSDT',
+            PYR: 'https://api.binance.com/api/v3/ticker/price?symbol=PYRUSDT',
+            LUNA: 'https://api.binance.com/api/v3/ticker/price?symbol=LUNAUSDT'
+        };
+
+        // Eldeki adetler
+const holdings = {
+            AVAX: 118,
+            PDA: 67188,
+            PYR: 1259,
+            LUNA: 27919
+        };
+
+        // Harcanan para
+        const spentMoney = 38500;
+
+        // Fonksiyon, belirtilen sembol için fiyatı alır
+        function getPrice(symbol) {
+            return fetch(endpoints[symbol])
+                .then(response => response.json())
+                .then(data => parseFloat(data.price))
+                .catch(error => console.error('Fiyat alınamadı:', error));
+        }
+
+        // Toplam portföy değerini hesapla
+        async function calculatePortfolioValue() {
+            let totalValue = 0;
+
+            // Her sembol için fiyatı al ve toplam değeri hesapla
+            for (const symbol in holdings) {
+                const price = await getPrice(symbol);
+                const holdingValue = holdings[symbol] * price;
+                totalValue += holdingValue;
+                console.log(`${symbol} için değer: ${holdingValue.toFixed(2)} USDT`);
+            }
+
+            // Toplam portföy değerini güncelle
+            updatePortfolioValue(totalValue);
+        }
+
+        // Toplam portföy değerini güncelle
+        function updatePortfolioValue(value) {
+            const portfolioValueElement = document.getElementById('portfolio-value');
+            //portfolioValueElement.textContent = `Toplam portföy değeri: ${value.toFixed(2)} USDT`;
+
+            // Zararı hesapla ve yazdır
+            const lossPercentage = ((value - spentMoney) / spentMoney) * 100;
+            portfolioValueElement.insertAdjacentHTML('afterend', `<p>Zarar yüzdesi: ${lossPercentage.toFixed(2)}%</p>`);
+        }
+
+        // Portföy değerini hesapla ve göster
+        calculatePortfolioValue();
+    </script>
+</body>
+</html>
