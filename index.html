@@ -47,7 +47,7 @@
                 const price = await getPrice(symbol);
                 const holdingValue = holdings[symbol] * price;
                 totalValue += holdingValue;
-                console.log(`${symbol} için değer: ${holdingValue.toFixed(2)} USDT`);
+                console.log(`${symbol} için değer: ${holdingValue.toFixed(4)} USDT`);
                 // Fiyatları HTML'e yazdır
                 document.getElementById('asset-prices').innerHTML += `<p>${symbol} fiyatı: ${price.toFixed(2)} USDT</p>`;
             }
