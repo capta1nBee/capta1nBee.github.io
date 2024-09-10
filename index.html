@@ -1,73 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portföy Değeri</title>
+    <title>Rastgele Kişi Seçici</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .input-area, .output-area {
+            width: 45%;
+        }
+        .input-area {
+            display: flex;
+            flex-direction: column;
+        }
+        .output-area {
+            border: 1px solid #ddd;
+            padding: 10px;
+            min-height: 200px;
+            background-color: #fff;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .name-card {
+            padding: 10px;
+            border: 1px solid #333;
+            background-color: #fff;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .selected-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .selected-list li {
+            padding: 10px;
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Portföy Değeri ve Varlık Fiyatları</h1>
-    <p id="portfolio-value">Portföy değeri hesaplanıyor...</p>
-    <p id="asset-prices">Varlık fiyatları bekleniyor...</p>
+
+    <div class="container">
+        <div class="input-area">
+            <h3>Kişi Ekle</h3>
+            <input type="text" id="nameInput" placeholder="İsim girin">
+            <button id="addNameButton">İsim Ekle</button>
+            <button id="pickRandomButton">Rastgele Kişi Seç</button>
+            <button id="clearButton">Temizle</button>
+            <ul id="nameList"></ul>
+        </div>
+
+        <div class="output-area" id="outputArea">
+            <h3>Seçilen Kişiler</h3>
+            <ul id="selectedNameCard" class="selected-list"></ul>
+        </div>
+    </div>
 
     <script>
-        // Binance API endpoint'leri
-        const endpoints = {
-            AVAX: 'https://api.binance.com/api/v3/ticker/price?symbol=AVAXUSDT',
-            PDA: 'https://api.binance.com/api/v3/ticker/price?symbol=PDAUSDT',
-            PYR: 'https://api.binance.com/api/v3/ticker/price?symbol=PYRUSDT',
-            LUNA: 'https://api.binance.com/api/v3/ticker/price?symbol=LUNAUSDT'
-        };
+        const nameInput = document.getElementById('nameInput');
+        const addNameButton = document.getElementById('addNameButton');
+        const pickRandomButton = document.getElementById('pickRandomButton');
+        const clearButton = document.getElementById('clearButton');
+        const nameList = document.getElementById('nameList');
+        const selectedNameCard = document.getElementById('selectedNameCard');
 
-        // Eldeki adetler
-		const holdings = {
-            AVAX: 0,
-            PDA: 77960,
-            PYR: 2106,
-            LUNA: 2690
-        };
+        let names = [];
+        let selectedNames = [];
 
-        // Harcanan para
-        const spentMoney = 20000;
-
-        // Fonksiyon, belirtilen sembol için fiyatı alır
-        function getPrice(symbol) {
-            return fetch(endpoints[symbol])
-                .then(response => response.json())
-                .then(data => parseFloat(data.price))
-                .catch(error => console.error('Fiyat alınamadı:', error));
-        }
-
-        // Toplam portföy değerini hesapla
-        async function calculatePortfolioValue() {
-            let totalValue = 0;
-
-            // Her sembol için fiyatı al ve toplam değeri hesapla
-            for (const symbol in holdings) {
-                const price = await getPrice(symbol);
-                const holdingValue = holdings[symbol] * price;
-                totalValue += holdingValue;
-                console.log(`${symbol} için değer: ${holdingValue.toFixed(4)} USDT`);
-                // Fiyatları HTML'e yazdır
-                document.getElementById('asset-prices').innerHTML += `<p>${symbol} fiyatı: ${price.toFixed(4)} USDT</p>`;
+        // Rastgele renk oluşturma fonksiyonu
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
             }
-
-            // Toplam portföy değerini güncelle
-            updatePortfolioValue(totalValue);
+            return color;
         }
 
-        // Toplam portföy değerini güncelle
-        function updatePortfolioValue(value) {
-            const portfolioValueElement = document.getElementById('portfolio-value');
-            portfolioValueElement.textContent = `Toplam portföy değeri: ${value.toFixed(4)} USDT`;
+        // İsmi listeye ekleme
+        addNameButton.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name !== "" && !names.includes(name)) {
+                names.push(name);
+                const listItem = document.createElement('li');
+                listItem.textContent = name;
+                nameList.appendChild(listItem);
+                nameInput.value = ''; // Giriş kutusunu temizle
+            }
+        });
 
-            // Zararı hesapla ve yazdır
-            const lossPercentage = ((spentMoney * 100) / value) - 100;
-            portfolioValueElement.insertAdjacentHTML('afterend', `<p>Zarar yüzdesi: ${lossPercentage.toFixed(4)}%</p>`);
-        }
+        // Rastgele isim seçme ve gösterme
+        pickRandomButton.addEventListener('click', () => {
+            if (names.length > 0) {
+                const randomIndex = Math.floor(Math.random() * names.length);
+                const randomName = names[randomIndex];
+                
+                // Seçilen kişiyi listeden çıkar
+                names.splice(randomIndex, 1);
+                
+                // Seçilen kişiyi ekle
+                selectedNames.push(randomName);
 
-        // Portföy değerini hesapla ve göster
-        calculatePortfolioValue();
+                // Seçilen kişileri sıralı olarak göster
+                selectedNameCard.innerHTML = ''; // Önce listeyi temizle
+                selectedNames.forEach((name, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${index + 1}. ${name}`;
+                    listItem.style.backgroundColor = getRandomColor(); // Rastgele renk ayarla
+                    selectedNameCard.appendChild(listItem);
+                });
+
+                // Listeyi güncelle
+                nameList.innerHTML = ''; // Listeyi temizle
+                names.forEach(name => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = name;
+                    nameList.appendChild(listItem);
+                });
+            } else {
+                const listItem = document.createElement('li');
+                listItem.textContent = "İsim listesi boş!";
+                selectedNameCard.appendChild(listItem);
+            }
+        });
+
+        // Temizle butonuna tıklama
+        clearButton.addEventListener('click', () => {
+            names = [];
+            selectedNames = [];
+            nameList.innerHTML = ''; // İsim listesi temizle
+            selectedNameCard.innerHTML = ''; // Seçilen kişiler listesi temizle
+        });
     </script>
+
 </body>
 </html>
