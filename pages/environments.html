@@ -1,0 +1,49 @@
+<h1 class="en">Mastering <span>Environments</span></h1>
+<h1 class="tr"><span>Ortamları</span> Yönetmek</h1>
+
+<p class="en">An "Environment" in Poyraz-K8s is not just a cluster; it is a meticulously managed logical boundary. The platform acts as a unified "Pane of Glass", allowing you to oversee dozens of disparate Kubernetes clusters from a single dashboard.</p>
+<p class="tr">Poyraz-K8s platformundaki bir "Ortam (Environment)" sadece bir küme (cluster) değildir; titizlikle yönetilen mantıksal bir sınırdır. Platform, onlarca farklı Kubernetes kümesini (cluster) tek bir kontrol panelinden izlemenizi sağlayan birleşik bir "Sistem Gözlem Ekranı" olarak hareket eder.</p>
+
+<div class="media-container" style="border: 2px solid var(--border);">
+    <img src="image/dashboard.png" alt="Poyraz-K8s Environments Dashboard Overview">
+</div>
+
+<div class="grid-2">
+    <div class="info-card">
+        <h4 class="en">Kubeconfig Federation</h4>
+        <h4 class="tr">Kubeconfig Federasyonu</h4>
+        <p class="en" style="font-size:1rem; margin:0;">Environments are securely imported via base64 encoded standard Kubeconfig files. The backend encrypts these and securely invokes them asyncronously exactly when a management action is required.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Ortamlar, base64 kodlu standart Kubeconfig dosyaları aracılığıyla güvenli bir şekilde içe aktarılır. Backend bu dosyaları şifreler ve asenkron olarak sadece yönetim eylemi başlatıldığında kullanır.</p>
+    </div>
+    <div class="info-card">
+        <h4 class="en">Multi-Cluster Telemetry</h4>
+        <h4 class="tr">Çoklu Küme (Multi-Cluster) Telemetrisi</h4>
+        <p class="en" style="font-size:1rem; margin:0;">The dashboard seamlessly merges pod resources, crashloop anomalies, and node capacity across ALL registered environments simultaneously.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Kontrol paneli; kayıtlı TÜM ortamlardaki pod kaynaklarını, crashloop (sürekli yeniden başlama) anomalilerini ve node kapasitelerini sorunsuz bir şekilde birleştirir.</p>
+    </div>
+</div>
+
+<div class="data-panel" style="margin-top:3rem;">
+    <table>
+        <thead>
+            <tr>
+                <th class="en">Environment Data Point</th><th class="tr">Ortam Veri Noktası</th>
+                <th class="en">Functionality</th><th class="tr">İşlevsellik</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong class="en">Cluster UID</strong><strong class="tr">Küme UID</strong></td>
+                <td><span class="en">The core identifier binding Role-Based permissions (RBAC) securely to exclusively that specific environment.</span><span class="tr">Rol-Tabanlı izinleri (RBAC) güvenli bir şekilde sadece o belirli ortama bağlayan temel tanımlayıcıdır.</span></td>
+            </tr>
+            <tr>
+                <td><strong class="en">Active Alerts</strong><strong class="tr">Aktif Uyarılar</strong></td>
+                <td><span class="en">Aggregates real-time Kubernetes Warning events (Evicted, Failed, OOMKilled) without requiring Prometheus.</span><span class="tr">Prometheus gerektirmeden gerçek zamanlı Kubernetes Warning (Uyarı) olaylarını (Evicted, Failed, OOMKilled) toplar.</span></td>
+            </tr>
+            <tr>
+                <td><strong class="en">Topology Engine</strong><strong class="tr">Topoloji Motoru</strong></td>
+                <td><span class="en">Isolates environment networking metrics to build cluster-specific traffic boundaries utilizing eBPF agents.</span><span class="tr">eBPF ajanlarını kullanarak kümeye özgü trafik sınırları oluşturmak için ortamın kendi ağı (networking) metriklerini izole eder.</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

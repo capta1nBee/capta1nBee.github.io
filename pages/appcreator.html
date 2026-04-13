@@ -1,0 +1,144 @@
+<h1 class="en">App <span>Creator</span> Engine</h1>
+<h1 class="tr">App <span>Creator</span> Motoru</h1>
+
+<p class="en">The App Creator is an intelligent GUI-to-YAML compiler that transforms multi-step wizard choices into production-ready K8s specifications dynamically bound to Services, Ingresses, and Autoscalers. It supports templates and remote container builds.</p>
+<p class="tr">App Creator; çok adımlı sihirbaz seçimlerini, Servislere, Ingress'lere ve Autoscaler'lara dinamik olarak bağlı üretime hazır K8s spesifikasyonlarına dönüştüren akıllı bir GUI'den YAML'a derleyicidir. Şablonları (Templates) ve uzaktan konteyner (remote) derlemelerini destekler.</p>
+
+<h3 class="en">The Intelligent Wizard Workflow</h3>
+<h3 class="tr">Akıllı Sihirbaz İş Akışı</h3>
+
+<div class="grid-2">
+    <!-- Base Config -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/appcreator-1.png" style="width: 100%; display: block;" alt="Step 1">
+        </div>
+        <h4 class="en">1. Base Workload</h4>
+        <h4 class="tr">1. Temel İş Yükü</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Define Workload Type (Deployment, StatefulSet, CronJob), namespace, and core labels.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">İş Yükü Türünü (Deployment, StatefulSet, vb.), ad alanını ve temel etiketleri tanımlayın.</p>
+    </div>
+
+    <!-- Container / Image -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/appcreator-2.png" style="width: 100%; display: block;" alt="Step 2">
+        </div>
+        <h4 class="en">2. Container & Networking</h4>
+        <h4 class="tr">2. Konteyner ve Ağ</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Select image registry, expose container ports dynamically, and configure image pull policies.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">İmaj registry'sini seçin, konteyner portlarını dinamik dışa açın ve imaj çekme ilkelerini (pull policy) belirleyin.</p>
+    </div>
+
+    <!-- Environments -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-3.png" style="width: 100%; display: block;" alt="Step 3">
+        </div>
+        <h4 class="en">3. Environment Variables</h4>
+        <h4 class="tr">3. Ortam Değişkenleri</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Inject key-value pairs or map entire existing ConfigMaps and Secrets securely.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">Anahtar-değer çiftlerini enjekte edin veya mevcut ConfigMap ve Secret'ları güvenli bir şekilde eşleyin.</p>
+    </div>
+
+    <!-- Probes -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-4.png" style="width: 100%; display: block;" alt="Step 4">
+        </div>
+        <h4 class="en">4. Liveness & Readiness</h4>
+        <h4 class="tr">4. Sağlık Probları (Probes)</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Ensure zero-downtime rollouts by configuring HTTP, TCP, or Exec readiness limits.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">HTTP, TCP veya Exec hazırlık sınırlarını yapılandırarak sıfır kesintili (zero-downtime) sürümler sağlayın.</p>
+    </div>
+
+     <!-- Resources -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-5.png" style="width: 100%; display: block;" alt="Step 5">
+        </div>
+        <h4 class="en">5. Resource Quotas</h4>
+        <h4 class="tr">5. Kaynak Kotaları</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Safeguard cluster capacity by guaranteeing CPU/Memory limits and requests.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">CPU/Bellek sınırlarını ve isteklerini garanti altına alarak küme kapasitesini koruyun.</p>
+    </div>
+
+    <!-- Volumes -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-6.png" style="width: 100%; display: block;" alt="Step 6">
+        </div>
+        <h4 class="en">6. Persistent Storage</h4>
+        <h4 class="tr">6. Kalıcı Depolama</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Dynamically mount PVCs, HostPaths, or temporary EmptyDirs directly into the Pod filesystem.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">PVC'leri, HostPath'leri veya EmptyDir'leri doğrudan Pod dosya sistemine dinamik olarak bağlayın.</p>
+    </div>
+
+    <!-- Networking / Ingress -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-7.png" style="width: 100%; display: block;" alt="Step 7">
+        </div>
+        <h4 class="en">7. Ingress & Routing</h4>
+        <h4 class="tr">7. Ingress ve Yönlendirme</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Automatically compiles Ingress manifests with TLS Secret definitions and hostname mappings.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">TLS Secret tanımları ve host eşlemeleri ile Ingress manifestlerini otomatik olarak derler ve servise bağlar.</p>
+    </div>
+
+    <!-- ConfigMaps / Secrets Generation -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-8.png" style="width: 100%; display: block;" alt="Step 8">
+        </div>
+        <h4 class="en">8. ConfigMap Generation</h4>
+        <h4 class="tr">8. ConfigMap Üretimi</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Generate new distinct ConfigMaps and Secrets on-the-fly and bind them atomically.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">Anında (on-the-fly) yeni ve bağımsız ConfigMap ile Secret'lar oluşturup atomik olarak bağlayın.</p>
+    </div>
+
+    <!-- HPA & Advanced -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-9.png" style="width: 100%; display: block;" alt="Step 9">
+        </div>
+        <h4 class="en">9. Autoscaling (HPA)</h4>
+        <h4 class="tr">9. Otomatik Ölçeklendirme (HPA)</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Configure Horizontal Pod Autoscalers bounded by targeted CPU/Memory utilization profiles.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">Hedeflenen CPU/Bellek kullanım profilleriyle sınırlanmış Yatay Pod Ölçeklendiricileri (HPA) yapılandırın.</p>
+    </div>
+
+    <!-- Final Compilation -->
+    <div class="info-card">
+        <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="image/app-creator-10.png" style="width: 100%; display: block;" alt="Step 10">
+        </div>
+        <h4 class="en">10. Manifest Compilation</h4>
+        <h4 class="tr">10. Manifest Derlemesi</h4>
+        <p class="en" style="font-size:0.95rem; margin:0;">Review the final generated multi-manifest YAML before deploying directly to Kubernetes.</p>
+        <p class="tr" style="font-size:0.95rem; margin:0;">Doğrudan Kubernetes'e dağıtmadan önce üretilen son çoklu manifest YAML kodunu gözden geçirin.</p>
+    </div>
+</div>
+
+<h3 class="en" style="margin-top:4rem;">Advanced Integration Features</h3>
+<h3 class="tr" style="margin-top:4rem;">Gelişmiş Entegrasyon Özellikleri</h3>
+
+<div class="img-grid">
+    <div class="media-container" style="border-color: var(--secondary);">
+        <img src="image/app-creator-template.png" alt="App Templates">
+        <div style="padding: 1.5rem;">
+            <h4 class="en" style="color:var(--secondary); font-size:1.2rem; font-family:'Outfit';">App Templates</h4>
+            <h4 class="tr" style="color:var(--secondary); font-size:1.2rem; font-family:'Outfit';">App Şablonları</h4>
+            <p class="en" style="font-size:0.9rem; margin-bottom:0;">Save complex wizard configurations as reusable Templates. Deploy standardized Nginx, Redis, or Node.js stacks instantly.</p>
+            <p class="tr" style="font-size:0.9rem; margin-bottom:0;">Karmaşık sihirbaz konfigürasyonlarını yeniden kullanılabilir Şablonlar (Templates) olarak kaydedin. Standart Nginx, Redis veya Node.js ortamlarını anında dağıtın.</p>
+        </div>
+    </div>
+    <div class="media-container" style="border-color: var(--accent);">
+        <img src="image/app-creator-build-remote.png" alt="Remote Build CI/CD">
+        <div style="padding: 1.5rem;">
+            <h4 class="en" style="color:var(--accent); font-size:1.2rem; font-family:'Outfit';">Source-to-Image (CI/CD)</h4>
+            <h4 class="tr" style="color:var(--accent); font-size:1.2rem; font-family:'Outfit';">Koddan-İmaja (CI/CD)</h4>
+            <p class="en" style="font-size:0.9rem; margin-bottom:0;">Automatically clone Git repositories, build Dockerfile instructions remotely, push to a private registry, and rollout in one click.</p>
+            <p class="tr" style="font-size:0.9rem; margin-bottom:0;">Tek tıklamayla otomatik olarak Git depolarını klonlayın, Dockerfile komutlarını uzak (remote) derleyin, özel registry'ye gönderin ve dağıtın.</p>
+        </div>
+    </div>
+</div>

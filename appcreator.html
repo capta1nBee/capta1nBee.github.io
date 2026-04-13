@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poyraz-K8s Sovereign | App Creator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('poyraz-lang') || 'en';
+            setLang(savedLang);
+            document.getElementById("btn-en").addEventListener("click", () => setLang("en"));
+            document.getElementById("btn-tr").addEventListener("click", () => setLang("tr"));
+        });
+        function setLang(lang) {
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            localStorage.setItem('poyraz-lang', lang);
+        }
+    </script>
+</head>
+<body data-lang="en">
+    <aside>
+        <a href="environments.html" class="brand">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="8" stroke="var(--primary)" stroke-width="2.5"/><path d="M16 10V22M10 16H22" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>POYRAZ K8S</span>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-label en">Core Setup</div>
+            <div class="nav-label tr">Temel Kurulum</div>
+            <a href="environments.html" class="nav-link">
+                <span class="en">Environments</span><span class="tr">Ortamlar</span>
+            </a>
+            <a href="install.html" class="nav-link">
+                <span class="en">Installations</span><span class="tr">Kurulumlar</span>
+            </a>
+            <a href="backup.html" class="nav-link">
+                <span class="en">Backup</span><span class="tr">Yedekleme</span>
+            </a>
+            <a href="federation.html" class="nav-link">
+                <span class="en">Federation</span><span class="tr">Federasyon</span>
+            </a>
+            <a href="rbac.html" class="nav-link">
+                <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Workload Delivery</div>
+            <div class="nav-label tr">İş Yükü Dağıtımı</div>
+            <a href="appcreator.html" class="nav-link active">
+                <span class="en">App Creator</span><span class="tr">App Oluşturucu</span>
+            </a>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Ecosystem</span><span class="tr">Helm Ekosistemi</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config & Secrets</span><span class="tr">Config & Secret</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Security Intelligence</div>
+            <div class="nav-label tr">Güvenlik İstihbaratı</div>
+                        <a href="vuln-scan.html" class="nav-link">
+                <span class="en">Vuln Scanner</span><span class="tr">Zafiyet Tarama</span>
+            </a>
+            <a href="cluster-eye.html" class="nav-link">
+                <span class="en">Cluster Eye</span><span class="tr">Cluster Eye</span>
+            </a>
+            <a href="exec.html" class="nav-link">
+                <span class="en">Terminal Exec</span><span class="tr">Terminal Komut</span>
+            </a>
+            <a href="exec-recorder.html" class="nav-link">
+                <span class="en">Exec Recorder</span><span class="tr">Komut Kaydedici</span>
+            </a>
+            <a href="network-flow.html" class="nav-link">
+                <span class="en">Network Flow</span><span class="tr">Ağ Akışı</span>
+            </a>
+        </div>
+        
+        <div class="nav-section">
+            <div class="nav-label en">Analysis</div>
+            <div class="nav-label tr">Analiz</div>
+            <a href="report.html" class="nav-link">
+                <span class="en">Reporting</span><span class="tr">Raporlama</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="content-wrapper">
+        <div class="sticky-header">
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
+            <div class="lang-control">
+                <button id="btn-en" class="lang-btn active">EN</button>
+                <button id="btn-tr" class="lang-btn">TR</button>
+            </div>
+        </div>
+
+        <h1 class="en">App <span>Creator</span> Engine</h1>
+        <h1 class="tr">App <span>Creator</span> Motoru</h1>
+
+        <p class="en">The App Creator is an intelligent GUI-to-YAML compiler that transforms multi-step wizard choices into production-ready K8s specifications dynamically bound to Services, Ingresses, and Autoscalers. It supports templates and remote container builds.</p>
+        <p class="tr">App Creator; çok adımlı sihirbaz seçimlerini, Servislere, Ingress'lere ve Autoscaler'lara dinamik olarak bağlı üretime hazır K8s spesifikasyonlarına dönüştüren akıllı bir GUI'den YAML'a derleyicidir. Şablonları (Templates) ve uzaktan konteyner (remote) derlemelerini destekler.</p>
+
+        <h3 class="en">The 8-Step Wizard Workflow</h3>
+        <h3 class="tr">8 Adımlı Sihirbaz İş Akışı</h3>
+
+        <div class="grid-2">
+            <!-- Step 2: Container -->
+            <div class="info-card">
+                <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                    <img src="image/appcreator-2.png" style="width: 100%; display: block;" alt="Step 2">
+                </div>
+                <h4 class="en">1. Container Build Source</h4>
+                <h4 class="tr">1. Konteyner Derleme Kaynağı</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Pull images directly from public/private registries, or dynamically execute a <strong>Build from Git</strong> pipeline.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;">İmajları public/private registry'lerden çekin veya dinamik olarak <strong>Git'ten Derle (Build from Git)</strong> iş akışını tetikleyin.</p>
+            </div>
+
+            <!-- Step 3: Ports & Env -->
+            <div class="info-card">
+                <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                    <img src="image/app-creator-3.png" style="width: 100%; display: block;" alt="Step 3">
+                </div>
+                <h4 class="en">2. Ports & Environment</h4>
+                <h4 class="tr">2. Portlar ve Ortam Değişkenleri</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Expose TCP/UDP ports and inject distinct environment variables securely into your pod configurations.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;">Konteynerlere (Pod) TCP/UDP portlarını açın ve özel ortam değişkenlerini güvenle yerleştirin.</p>
+            </div>
+
+            <!-- Step 4: Resources -->
+            <div class="info-card">
+                <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                    <img src="image/app-creator-4.png" style="width: 100%; display: block;" alt="Step 4">
+                </div>
+                <h4 class="en">3. Resource Restrictions</h4>
+                <h4 class="tr">3. Kaynak Kısıtlamaları</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Prevent cluster node depletion using precise CPU/Memory limits and guaranteed requests.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;">Hassas CPU/Bellek limitleri ve garanti edilen talepler aracılığıyla düğüm (node) kaynaklarının tükenmesini önleyin.</p>
+            </div>
+
+             <!-- Step 5: Kind Config -->
+            <div class="info-card">
+                <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                    <img src="image/app-creator-5.png" style="width: 100%; display: block;" alt="Step 5">
+                </div>
+                <h4 class="en">4. Workload Strategy</h4>
+                <h4 class="tr">4. İş Yükü Stratejisi</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Execute zero-downtime rollouts with <code>RollingUpdate</code> or hard resets via <code>Recreate</code>.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;"><code>RollingUpdate</code> ile kesintisiz sürüm veya <code>Recreate</code> ile sert sıfırlamalar uygulayın.</p>
+            </div>
+
+            <!-- Step 6: Add-ons -->
+            <div class="info-card">
+                <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                    <img src="image/app-creator-6.png" style="width: 100%; display: block;" alt="Step 6">
+                </div>
+                <h4 class="en">5. Networking & Add-ons</h4>
+                <h4 class="tr">5. Ağ ve Eklentiler</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Atomic toggles for Services, advanced Ingress routing (with TLS), HPA, ConfigMaps, and encrypted Secrets.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;">Servisler, Ingress yönlendirmeleri (TLS dahil), HPA, ConfigMap ve şifreli Secret'lar için tetikleyiciler (toggles).</p>
+            </div>
+
+            <!-- Step 7: Volumes -->
+            <div class="info-card">
+                <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                    <img src="image/app-creator-7.png" style="width: 100%; display: block;" alt="Step 7">
+                </div>
+                <h4 class="en">6. Storage & Volume Mounts</h4>
+                <h4 class="tr">6. Depolama (Storage) ve Volume</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Securely attach PVCs or mount previously generated ConfigMaps/Secrets directly into internal container paths.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;">PVC'leri (kalıcı disk) veya oluşturulan ConfigMap/Secret'ları doğrudan konteynerin iç dosya sistemine bağlayın.</p>
+            </div>
+            
+            <!-- Step 8: Review -->
+            <div class="info-card" style="grid-column: 1 / -1;">
+                <div style="margin-bottom: 1rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);">
+                    <img src="image/app-creator-8.png" style="width: 100%; display: block;" alt="Step 8">
+                </div>
+                <h4 class="en">7. Compilation & Review</h4>
+                <h4 class="tr">7. Derleme ve Gözden Geçirme</h4>
+                <p class="en" style="font-size:1rem; margin:0;">Review the massive final multi-document YAML before initiating deployment. Extract it, or deploy instantly.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Dağıtıma başlamadan önce üretilen kapsamlı çoklu (multi-document) YAML kodunu tam ekran gözden geçirin. Dışa aktarın veya hemen uygulayın.</p>
+            </div>
+        </div>
+
+        <h3 class="en" style="margin-top:4rem;">Native GitOps Integration</h3>
+        <h3 class="tr" style="margin-top:4rem;">Doğal GitOps Entegrasyonu</h3>
+
+        <div class="grid-2">
+            <div class="info-card" style="border-top: 4px solid var(--accent)">
+                <img src="image/appcreator-1.png" style="width: 100%; border-radius:12px; margin-bottom:1.5rem;" alt="Git Add">
+                <h4 class="en">Secure Provider Connect</h4>
+                <h4 class="tr">Güvenli Sağlayıcı Bağlantısı</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Attach GitHub, GitLab or direct URLs securely via Personal Access Tokens mapped directly to K8s Secrets.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;">GitHub, GitLab veya doğrudan URL bağlantılarınızı; doğrudan K8s Secret'larına eşlenen jetonlar (PAT) ile güvenle bağlayın.</p>
+            </div>
+            
+            <div class="info-card" style="border-top: 4px solid var(--primary)">
+                <img src="image/app-creator-9.png" style="width: 100%; border-radius:12px; margin-bottom:1.5rem;" alt="GitOps Deploy">
+                <h4 class="en">Pull Request Pipelines</h4>
+                <h4 class="tr">Otomatik PR (GitOps) İş Akışları</h4>
+                <p class="en" style="font-size:0.95rem; margin:0;">Instead of pushing to the Kubernetes API, export the entire wizard directly into a Pull Request to your repository.</p>
+                <p class="tr" style="font-size:0.95rem; margin:0;">Sihirbaz sonucunu doğrudan Kubernetes'e basmak (push) yerine, hedef deponuza otomatik bir "Pull Request" olarak gönderin (GitOps).</p>
+            </div>
+        </div>
+
+        <div class="media-container" style="border-color: var(--secondary);">
+            <img src="image/app-creator-10.png" alt="Deployment Telemetry">
+            <div style="padding: 1.5rem;">
+                <h4 class="en" style="color:var(--secondary); font-size:1.2rem; font-family:'Outfit';">Deployment Origin Auditing</h4>
+                <h4 class="tr" style="color:var(--secondary); font-size:1.2rem; font-family:'Outfit';">Dağıtım Kökeni Denetimi</h4>
+                <p class="en" style="font-size:0.95rem; margin-bottom:0;">A full forensic view of deployments tracking exactly whether an application was applied "Directly" or "Via GitOps" (with hyperlinks to the exact Git PR branch).</p>
+                <p class="tr" style="font-size:0.95rem; margin-bottom:0;">Bir uygulamanın kümeye "Doğrudan" mı yoksa "GitOps Üzerinden" (orijinal Git PR sekmesine bağlantılarla) mi uygulandığını tam olarak izleyen adli dağıtım görünümü.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

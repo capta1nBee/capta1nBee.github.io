@@ -1,0 +1,24 @@
+<h1 class="en">Terminal <span>Exec Guard</span></h1>
+<h1 class="tr">Terminal <span>Exec Koruması</span></h1>
+
+<p class="en">Zero-trust execution environment. Every terminal shell requested by a user passes through the Great Firewall—a strict RegEx parser that blocks malicious injections by default.</p>
+<p class="tr">Sıfır-güven (Zero-trust) çalıştırma ortamı. Bir kullanıcı tarafından istenen her terminal kabuğu (shell), kötü niyetli enjeksiyonları varsayılan olarak engelleyen katı bir RegEx ayrıştırıcısı olan Büyük Güvenlik Duvarı'ndan (Great Firewall) geçer.</p>
+
+<div class="media-container" style="border-color: var(--danger);">
+    <img src="image/exec.png" alt="Terminal Exec Error Blocked">
+</div>
+
+<div class="grid-2">
+    <div class="info-card">
+        <h4 class="en">The Great Firewall</h4>
+        <h4 class="tr">Büyük Güvenlik Duvarı</h4>
+        <p class="en" style="font-size:1rem; margin:0;">Uses defensive normalization to split pipes (<code>|</code>) and explicitly blocks shell operators like <code>; & > &lt; ` $ ||</code> before execution ever reaches the Kubernetes API.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Boru (pipe <code>|</code>) karakterlerini ayırmak için savunmacı bir normalizasyon kullanır ve K8s API'ye ulaşmadan önce <code>; & > &lt; ` $ ||</code> gibi kabuk operatörlerini açıkça engeller.</p>
+    </div>
+    <div class="info-card">
+        <h4 class="en">Casbin Policy Linking</h4>
+        <h4 class="tr">Casbin Politika Bağlantısı</h4>
+        <p class="en" style="font-size:1rem; margin:0;">Roles define strictly which regex patterns are allowed. If the parsed base command does not match an allowed pattern in the database, it rejects.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Roller, hangi regex pattern'lerinin izin verildiğini kesin olarak tanımlar. Ayrıştırılan temel komut veritabanındaki izin verilen pattern listesi ile eşleşmezse, (istek) reddedilir.</p>
+    </div>
+</div>

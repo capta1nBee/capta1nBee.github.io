@@ -1,0 +1,35 @@
+<h1 class="en">Helm <span>Orchestration</span></h1>
+<h1 class="tr">Helm <span>Orkestrasyonu</span></h1>
+
+<p class="en">A native bridge into the Helm Package Manager ecosystem. Supports async deployments, custom configuration mapping, and global conflict prevention.</p>
+<p class="tr">Helm Paket Yöneticisi ekosistemine yerel bir köprü. Asenkron dağıtımları, özel yapılandırma eşlemesini ve genel çakışma önlemeyi destekler.</p>
+
+<div class="img-grid">
+    <div class="media-container">
+        <img src="image/helm-discover.png" alt="Helm Chart Discovery">
+    </div>
+    <div class="media-container">
+        <img src="image/helm-installed.png" alt="Installed Helm Releases">
+    </div>
+</div>
+
+<div class="data-panel">
+    <table>
+        <thead>
+            <tr>
+                <th class="en">Tech Component</th><th class="tr">Teknoloji Bileşeni</th>
+                <th class="en">Mechanism</th><th class="tr">Mekanizma</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="en">Async Engine</span><span class="tr">Asenkron Motor</span></td>
+                <td><span class="en">Powered by <code>CompletableFuture</code> to prevent orchestrator blocking during heavy enterprise deployments.</span><span class="tr">Ağır kurumsal dağıtımlar sırasında orkestratörün engellenmesini (blocking) önlemek için <code>CompletableFuture</code> ile güçlendirilmiştir.</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">Security Layer</span><span class="tr">Güvenlik Katmanı</span></td>
+                <td><span class="en">Dynamically creates task-specific Kubeconfigs via memory with strict <code>chmod 600</code> permissions to prevent cross-container leaks.</span><span class="tr">Konteynerler arası sızıntıları önlemek için katı <code>chmod 600</code> izinleriyle bellek üzerinden göreve özel Kubeconfig'ler oluşturur dinamik olarak.</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

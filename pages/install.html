@@ -1,0 +1,61 @@
+<h1 class="en">Platform <span>Installation</span></h1>
+<h1 class="tr">Platform <span>Kurulumu</span></h1>
+
+<p class="en" style="font-size:1.2rem;">Poyraz-K8s is not a monolithic script; it is a distributed intelligent layer across your Kubernetes clusters. The installation process is divided into two distinct scopes: The <strong>Central Intelligence Hub (Backend)</strong> and the <strong>Edge Agents (eBPF & Security)</strong> deployed on each managed cluster.</p>
+<p class="tr" style="font-size:1.2rem;">Poyraz-K8s monolitik bir betik değildir; Kubernetes kümeleriniz (cluster) boyunca dağıtılmış akıllı bir katmandır. Kurulum süreci iki belirgin kapsama (scope) ayrılmıştır: <strong>Merkezi İstihbarat Merkezi (Backend)</strong> ve yönetilen her kümeye dağıtılan <strong>Uç Ajanları (eBPF ve Güvenlik)</strong>.</p>
+
+<div class="grid-2">
+    <div class="info-card" style="border-top: 4px solid var(--primary);">
+        <h4 class="en">1. Central Hub (Backend orchestrator)</h4>
+        <h4 class="tr">1. Merkezi Sistem (Backend orkestratörü)</h4>
+        <p class="en">The core backend provides the API, Casbin Authorization, PostgreSQL persistence, and Helm Bridge. It is installed centrally only once.</p>
+        <p class="tr">Temel backend sistemi; API, Casbin Yetkilendirme, PostgreSQL veritabanı kalıcılığı ve Helm Köprüsünü sağlar. Sadece bir kez merkezi olarak kurulur.</p>
+        <code style="display:block; margin-top:1rem; padding:1rem; background:#000;">helm install poyraz-backend ./charts</code>
+    </div>
+    <div class="info-card" style="border-top: 4px solid var(--danger);">
+        <h4 class="en">2. Edge Agents (DaemonSets)</h4>
+        <h4 class="tr">2. Uç Ajanları (DaemonSet'ler)</h4>
+        <p class="en">eBPF network scanners and Runtime Security agents are deployed to every cluster you wish to manage, running as priviledged DaemonSets on every node.</p>
+        <p class="tr">eBPF ağ tarayıcıları ve Runtime (Çalışma Zamanı) Güvenlik ajanları, yönetmek istediğiniz her kümeye dağıtılır ve her node (düğüm) üzerinde ayrıcalıklı DaemonSet'ler olarak çalışır.</p>
+        <code style="display:block; margin-top:1rem; padding:1rem; background:#000;">kubectl apply -f poyraz-agents.yaml</code>
+    </div>
+</div>
+
+<h3 class="en">Agent Architectural Details</h3>
+<h3 class="tr">Ajan Mimari Detayları</h3>
+
+<div class="data-panel">
+    <table>
+        <thead>
+            <tr>
+                <th class="en">Agent Binary</th><th class="tr">Ajan Binary (Dosyası)</th>
+                <th class="en">Deployment Target</th><th class="tr">Dağıtım Hedefi</th>
+                <th class="en">Kernel Requirement</th><th class="tr">Çekirdek (Kernel) Gereksinimi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong style="color:var(--primary)">ebpf-flow-agent</strong></td>
+                <td><span class="en">Every Node (DaemonSet)</span><span class="tr">Her Düğüm (DaemonSet)</span></td>
+                <td><span class="en">min. Linux 4.15 (eBPF enabled)</span><span class="tr">min. Linux 4.15 (eBPF aktif)</span></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p class="en" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Hooks into kernel socket functions (<code>tcp_sendmsg</code>, <code>tcp_cleanup_rbuf</code>) to build the real-time Network Map without sidecars or proxy lag.</em></p>
+                    <p class="tr" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Sidecar'lar veya proxy gecikmeleri olmadan gerçek zamanlı Ağ Haritasını oluşturmak için doğrudan çekirdek soket işlevlerine (<code>tcp_sendmsg</code>, vb.) entegre olur.</em></p>
+                </td>
+            </tr>
+            <tr>
+                <td><strong style="color:var(--danger)">runtime-guard</strong></td>
+                <td><span class="en">Every Node (DaemonSet)</span><span class="tr">Her Düğüm (DaemonSet)</span></td>
+                <td><span class="en">min. Linux 5.8 (BPF RingBuf)</span><span class="tr">min. Linux 5.8 (BPF RingBuf)</span></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <p class="en" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Monitors system calls (<code>execve</code>, <code>mkdir</code>, <code>ptrace</code>) to enforce zero-trust limits on pods and report exec session footprints.</em></p>
+                    <p class="tr" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Pod'lar üzerinde sıfır güven sınırlarını zorlamak ve exec oturumu izlerini raporlamak için sistem çağrılarını gözetler.</em></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

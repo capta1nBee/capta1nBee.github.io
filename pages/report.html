@@ -1,0 +1,36 @@
+<h1 class="en">Enterprise <span>Reporting & Telemetry</span></h1>
+<h1 class="tr">Kurumsal <span>Raporlama ve Telemetri</span></h1>
+
+<p class="en">Aggregating thousands of pod data points into actionable insights. Real-time observability ensures maximum uptime and resource optimization.</p>
+<p class="tr">Binlerce pod veri noktasını eyleme dönüştürülebilir istihbaratlara dönüştürmek (birleştirmek). Gerçek zamanlı gözlemlenebilirlik maksimum çalışma süresi (uptime) ve kaynak optimizasyonu sağlar.</p>
+
+<div class="media-container" style="border-width: 2px;">
+    <img src="image/report.png" alt="Kubernetes High-Level Cluster Report">
+</div>
+
+<h3 class="en" style="margin-top:4rem;">Correlated Pod Metrology</h3>
+<h3 class="tr" style="margin-top:4rem;">Korele Pod Metrolojisi</h3>
+<div class="media-container" style="max-width:800px;">
+    <img src="image/pod-metric.png" alt="Pod Level Metric Analysis">
+</div>
+
+<div class="data-panel">
+    <table>
+        <thead>
+            <tr>
+                <th class="en">Metric Layer</th><th class="tr">Metrik Katmanı</th>
+                <th class="en">Collection Methodology</th><th class="tr">Toplama Metodolojisi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="en">Event Polling</span><span class="tr">Olay (Event) Yoklaması</span></td>
+                <td><span class="en">Leverages K8s informer-based caching to display real-time Warning/Normal events without continuously stressing the API Server.</span><span class="tr">K8s API Sunucusunu sürekli strese sokmadan gerçek zamanlı Uyarı/Normal olayları görüntülemek için K8s bilgilendirici (Informer) tabanlı önbelleğe almayı kullanır.</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">Metric Server Hook</span><span class="tr">Metrik Sunucusu Ucu</span></td>
+                <td><span class="en">Ingests <code>metrics.k8s.io</code> for near-instant (15s precision) memory and CPU visualization localized to the cluster-id constraints.</span><span class="tr">Cluster-id (Küme Kimliği) kısıtlamaları kapsamında; yerel bellek ve CPU görselleştirmesi (15s hassasiyetli) için <code>metrics.k8s.io</code> alır.</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

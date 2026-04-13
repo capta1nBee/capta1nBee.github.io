@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poyraz-K8s Modular Documentation Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #06b6d4;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --bg: #030712;
+            --sidebar-bg: #0b1120;
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --code-bg: #000000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); display: flex; overflow: hidden; }
+
+        /* Sidebar */
+        aside {
+            width: 320px; height: 100vh; background: var(--sidebar-bg);
+            border-right: 1px solid var(--border); display: flex; flex-direction: column;
+            padding: 2rem; overflow-y: auto; flex-shrink: 0;
+        }
+
+        .brand { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 10px; margin-bottom: 3rem; text-decoration: none; }
+        .brand span { background: linear-gradient(90deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .nav-group { margin-bottom: 2rem; }
+        .nav-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 1rem; font-weight: 700; }
+        .nav-link { 
+            display: block; padding: 0.75rem 1rem; color: var(--text-dim); text-decoration: none; 
+            border-radius: 12px; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; 
+            margin-bottom: 0.25rem;
+        }
+        .nav-link:hover, .nav-link.active { background: rgba(6, 182, 212, 0.1); color: var(--primary); }
+        .nav-link.active { border-left: 3px solid var(--primary); }
+
+        /* Main */
+        main { flex: 1; height: 100vh; overflow-y: auto; padding: 3rem 5rem; scroll-behavior: smooth; }
+        section { padding-bottom: 6rem; border-bottom: 1px solid var(--border); margin-bottom: 6rem; }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem; }
+        .lang-toggle { display: flex; background: var(--sidebar-bg); border: 1px solid var(--border); border-radius: 99px; padding: 4px; }
+        .lang-btn { padding: 6px 16px; border-radius: 99px; border: none; background: transparent; color: var(--text-dim); cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .lang-btn.active { background: var(--primary); color: white; }
+
+        h1 { font-family: 'Outfit', sans-serif; font-size: 3.5rem; margin-bottom: 1.5rem; }
+        h2 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 2rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
+        p { color: var(--text-dim); font-size: 1.1rem; max-width: 800px; margin-bottom: 2rem; }
+
+        /* Modules Presentation Grid */
+        .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+        .module-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 2rem; transition: transform 0.3s; }
+        .module-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .module-card h3 { margin-bottom: 1rem; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+        .module-card p { font-size: 0.9rem; margin-bottom: 0; }
+
+        /* Tech Details */
+        .tech-box { background: var(--card-bg); border-left: 4px solid var(--secondary); padding: 1.5rem; border-radius: 8px; margin: 2rem 0; }
+        .tech-box h4 { margin-bottom: 0.5rem; font-size: 1rem; color: var(--secondary); }
+
+        /* Tables */
+        .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 16px; margin: 2rem 0; width: 100%; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 1.25rem; background: rgba(255,255,255,0.03); color: var(--text); border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        td { padding: 1.25rem; border-bottom: 1px solid var(--border); color: var(--text-dim); font-size: 0.9rem; vertical-align: top; }
+        code { font-family: 'Fira Code', monospace; color: var(--secondary); background: rgba(16, 185, 129, 0.1); padding: 2px 6px; border-radius: 4px; }
+
+        /* Code Blocks */
+        .code-block { background: var(--code-bg); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); margin: 2rem 0; position: relative; }
+        .code-block pre { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #a5f3fc; overflow-x: auto; line-height: 1.5; }
+        .code-badge { position: absolute; top: 0; right: 20px; background: var(--primary); color: white; padding: 2px 10px; border-radius: 0 0 8px 8px; font-size: 0.7rem; font-weight: 700; }
+
+        /* Bilingual Toggles */
+        [lang="tr"] .en { display: none !important; }
+        [lang="en"] .tr { display: none !important; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        section { animation: fadeIn 0.6s ease-out forwards; }
+    </style>
+</head>
+<body id="top">
+    <aside>
+        <a href="#top" class="brand">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="6" stroke="var(--primary)" stroke-width="2"/><circle cx="16" cy="16" r="6" stroke="var(--secondary)" stroke-width="2"/></svg>
+            <span>Poyraz-K8s</span>
+        </a>
+
+        <div class="nav-group">
+            <div class="nav-title en">Overview</div>
+            <div class="nav-title tr">Genel Bakış</div>
+            <a href="#overview" class="nav-link en active">Module Presentation</a>
+            <a href="#overview" class="nav-link tr active">Modül Tanıtımı</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title en">Deployment</div>
+            <div class="nav-title tr">Kurulum</div>
+            <a href="#install-platform" class="nav-link en">Platform Setup</a>
+            <a href="#install-platform" class="nav-link tr">Platform Kurulumu</a>
+            <a href="#env-vars" class="nav-link en">Environment Variables</a>
+            <a href="#env-vars" class="nav-link tr">Ortam Değişkenleri</a>
+            <a href="#install-security" class="nav-link en">Runtime Security Setup</a>
+            <a href="#install-security" class="nav-link tr">Runtime Security Kurulumu</a>
+            <a href="#install-network" class="nav-link en">Network Monitor Setup</a>
+            <a href="#install-network" class="nav-link tr">Ağ İzleyici Kurulumu</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title en">Advanced Features</div>
+            <div class="nav-title tr">Gelişmiş Özellikler</div>
+            <a href="#auth-logic" class="nav-link en">Cluster-Aware Auth</a>
+            <a href="#auth-logic" class="nav-link tr">Küme-Duyarlı Yetki</a>
+            <a href="#exec-sec" class="nav-link en">Exec & Terminal Security</a>
+            <a href="#exec-sec" class="nav-link tr">Terminal Güvenliği</a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="top-bar">
+            <div class="en" style="color: var(--text-dim); font-weight: 500;">Technical Documentation Hub</div>
+            <div class="tr" style="color: var(--text-dim); font-weight: 500;">Teknik Dokümantasyon Merkezi</div>
+            <div class="lang-toggle">
+                <button id="btn-en" class="lang-btn" onclick="setLang('en')">EN</button>
+                <button id="btn-tr" class="lang-btn" onclick="setLang('tr')">TR</button>
+            </div>
+        </div>
+
+        <!-- Section: Module Overview -->
+        <section id="overview">
+            <h1 class="en">Platform Roadmap</h1>
+            <h1 class="tr">Platform Yol Haritası</h1>
+            <p class="en">A modular breakdown of the Poyraz-K8s intelligence and security components.</p>
+            <p class="tr">Poyraz-K8s zeka ve güvenlik bileşenlerinin modüler dağılımı.</p>
+
+            <div class="module-grid">
+                <div class="module-card">
+                    <h3 class="en">🚀 AppCreator</h3>
+                    <h3 class="tr">🚀 AppCreator</h3>
+                    <p class="en">8-step wizard to build K8s apps from scratch. Zero YAML knowledge required. Integrated GitOps flow for PR-based deployments.</p>
+                    <p class="tr">Sıfırdan uygulama oluşturmak için 8 adımlı sihirbaz. YAML bilgisi gerektirmez. PR tabanlı dağıtımlar için entegre GitOps akışı.</p>
+                </div>
+                <div class="module-card">
+                    <h3 class="en">🛡️ Runtime Security</h3>
+                    <h3 class="tr">🛡️ Runtime Güvenliği</h3>
+                    <p class="en">eBPF-based real-time syscall monitoring. Detect drift, unauthorized executions, and file access violations instantly.</p>
+                    <p class="tr">eBPF tabanlı gerçek zamanlı sistem çağrısı izleme. Kaymaları, yetkisiz çalıştırmaları ve dosya erişim ihlallerini anında tespit edin.</p>
+                </div>
+                <div class="module-card">
+                    <h3 class="en">🕸️ Network Monitor</h3>
+                    <h3 class="tr">🕸️ Ağ İzleyici</h3>
+                    <p class="en">Deep packet analysis at L3/L4/L7. Visual topology mapping of microservice flows with automatic NetworkPolicy generation.</p>
+                    <p class="tr">L3/L4/L7 katmanlarında derin paket analizi. Otomatik NetworkPolicy oluşturma ile mikro hizmet akışlarının görsel topoloji haritalaması.</p>
+                </div>
+                <div class="module-card">
+                    <h3 class="en">🤖 AI Analyst</h3>
+                    <h3 class="tr">🤖 Yapay Zeka Analisti</h3>
+                    <p class="en">Integrated LLM (Ollama) that consumes cluster logs and metrics to provide root-cause analysis and health insights.</p>
+                    <p class="tr">Kök neden analizi ve sağlık öngörüleri sağlamak için küme günlüklerini ve metriklerini tüketen entegre LLM (Ollama).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Platform Installation -->
+        <section id="install-platform">
+            <h2 class="en">Platform Deployment</h2>
+            <h2 class="tr">Platform Kurulumu</h2>
+            <p class="en">Deploy the core Poyraz-K8s control plane using Docker Compose for local or single-instance setups.</p>
+            <p class="tr">Yerel veya tek örnekli kurulumlar için Docker Compose kullanarak çekirdek Poyraz-K8s kontrol düzlemini kurun.</p>
+
+            <div class="code-block">
+                <div class="code-badge">DOCKER COMPOSE</div>
+                <pre>
+# Clone and build the full stack
+git clone https://github.com/poyraz/poyrazk8s.git
+cd poyrazk8s
+docker-compose up -d --build
+
+# Backend will be available at http://localhost:8686
+# Frontend will be available at http://localhost:3000</pre>
+            </div>
+        </section>
+
+        <!-- Section: ENVs -->
+        <section id="env-vars">
+            <h2 class="en">Environment Variables Reference</h2>
+            <h2 class="tr">Ortam Değişkenleri Rehberi</h2>
+            <p class="en">Configure your control plane and agents via these key variables.</p>
+            <p class="tr">Kontrol düzleminizi ve ajanlarınızı bu anahtar değişkenler aracılığıyla yapılandırın.</p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="en">Variable Name</th><th class="tr">Değişken Adı</th>
+                            <th class="en">Default</th><th class="tr">Varsayılan</th>
+                            <th class="en">Service</th><th class="tr">Servis</th>
+                            <th class="en">Description</th><th class="tr">Açıklama</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>SERVER_PORT</code></td><td>8686</td><td>Backend</td><td class="en">Spring Boot API Port</td><td class="tr">Backend API portu</td></tr>
+                        <tr><td><code>DATABASE_PATH</code></td><td>./data/k8s</td><td>Backend</td><td class="en">H2 file path for persistence</td><td class="tr">Kalıcı depolama için H2 dosya yolu</td></tr>
+                        <tr><td><code>AGENT_API_KEY</code></td><td>-</td><td>Both</td><td class="en">Secret key for agent communication</td><td class="tr">Ajan iletişimi için gizli anahtar</td></tr>
+                        <tr><td><code>VULN_SCAN_PATH</code></td><td>trivy</td><td>Backend</td><td class="en">Path to Trivy binary</td><td class="tr">Trivy binary dosyasının yolu</td></tr>
+                        <tr><td><code>JWT_SECRET</code></td><td>-</td><td>Backend</td><td class="en">Auth token signing key</td><td class="tr">Kimlik doğrulama anahtarı</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section: Runtime Security -->
+        <section id="install-security">
+            <h2 class="en">Runtime Security Agent Setup</h2>
+            <h2 class="tr">Runtime Security Ajan Kurulumu</h2>
+            <p class="en">The security agent runs as a privileged DaemonSet to monitor syscalls across all nodes.</p>
+            <p class="tr">Güvenlik ajanı, tüm düğümlerdeki sistem çağrılarını izlemek için yetkili bir DaemonSet olarak çalışır.</p>
+
+            <div class="tech-box">
+                <h4 class="en">Hardware Requirements</h4>
+                <h4 class="tr">Donanım Gereksinimleri</h4>
+                <p class="en">Requires Linux Kernel 5.4+ with BTF support enabled for eBPF CO-RE capabilities.</p>
+                <p class="tr">eBPF CO-RE yetenekleri için BTF desteği etkinleştirilmiş Linux Kernel 5.4+ gerektirir.</p>
+            </div>
+
+            <div class="code-block">
+                <div class="code-badge">KUBECTL</div>
+                <pre>
+# Deploy the security stack
+kubectl apply -f runtimesecurity/kubernetes/configmap.yaml
+kubectl apply -f runtimesecurity/kubernetes/rules-configmap.yaml
+kubectl apply -f runtimesecurity/kubernetes/daemonset.yaml</pre>
+            </div>
+        </section>
+
+        <!-- Section: Network Monitoring -->
+        <section id="install-network">
+            <h2 class="en">eBPF Network Monitoring</h2>
+            <h2 class="tr">eBPF Ağ İzleme</h2>
+            
+            <h3 class="en">Agent Installation</h3>
+            <h3 class="tr">Ajan Kurulumu</h3>
+            <p class="en">Deploy the network tracer agent to capture flows and L7 metadata (HTTP, gRPC, DB calls).</p>
+            <p class="tr">Akışları ve L7 meta verilerini (HTTP, gRPC, DB çağrıları) yakalamak için ağ izleyici ajanını kurun.</p>
+
+            <div class="code-block">
+                <div class="code-badge">COMMAND</div>
+                <pre>
+# Apply network observer manifests
+kubectl apply -f runtimesecurity/kubernetes/network-observer.yaml</pre>
+            </div>
+
+            <h3 class="en">Flow Architecture & Visualization</h3>
+            <h3 class="tr">Akış Mimarisi ve Görselleştirme</h3>
+            <p class="en">Flows are captured in the kernel using kprobes/uprobes, enriched with K8s metadata (Pod/NS), and aggregated into a dynamic topology map on the UI.</p>
+            <p class="tr">Akışlar, kprobes/uprobes kullanılarak çekirdekte yakalanır, K8s meta verileriyle (Pod/NS) zenginleştirilir ve arayüzde dinamik bir topoloji haritasında birleştirilir.</p>
+        </section>
+
+        <!-- Section: Authorization -->
+        <section id="auth-logic">
+            <h2 class="en">Role-Based & Cluster-Aware Authorization</h2>
+            <h2 class="tr">Rol-Tabanlı ve Küme-Duyarlı Yetkilendirme</h2>
+            
+            <p class="en">Poyraz-K8s uses a <strong>Multi-Tenant Cluster-Aware</strong> logic. Permissions are tied to the <code>cluster_uid</code>, ensuring users only see resources in clusters they are authorized for.</p>
+            <p class="tr">Poyraz-K8s, <strong>Çok Kiracılı Küme-Duyarlı</strong> bir mantık kullanır. Yetkiler <code>cluster_uid</code>'ye bağlıdır, bu da kullanıcıların yalnızca yetkili oldukları kümelerdeki kaynakları görmesini sağlar.</p>
+
+            <div class="tech-box">
+                <h4 class="en">Casbin Integration</h4>
+                <h4 class="tr">Casbin Entegrasyonu</h4>
+                <p class="en">Uses Casbin (e.g. <code>p, admin, cluster-123:namespace-a, view</code>) to manage granular access policies.</p>
+                <p class="tr">Ayrıntılı erişim politikalarını yönetmek için Casbin (örneğin <code>p, admin, cluster-123:namespace-a, view</code>) kullanır.</p>
+            </div>
+        </section>
+
+        <!-- Section: Exec Security -->
+        <section id="exec-sec">
+            <h2 class="en">Exec Security & Terminal Audit</h2>
+            <h2 class="tr">Terminal Güvenliği ve Denetimi</h2>
+            
+            <h3 class="en">Role-Based Command Permissions</h3>
+            <h3 class="tr">Rol-Tabanlı Komut Yetkileri</h3>
+            <p class="en">Restrict terminal power by assigning RegEx whitelists to roles. For example, Developer roles may run <code>ls</code> or <code>cat</code>, but are blocked from <code>rm -rf</code> or <code>curl</code>.</p>
+            <p class="tr">Rollere RegEx beyaz listeleri (whitelist) atayarak terminal yetkilerini kısıtlayın. Örneğin, Geliştirici rolleri <code>ls</code> veya <code>cat</code> çalıştırabilir, ancak <code>rm -rf</code> veya <code>curl</code> komutları engellenir.</p>
+
+            <h3 class="en">Session Recording (Video Audit)</h3>
+            <h3 class="tr">Oturum Kaydı (Video Denetimi)</h3>
+            <p class="en">Every terminal session is recorded as a series of time-stamped terminal events using <strong>rrweb</strong>. Admin users can "play back" the session like a video to audit user behavior exactly as it happened.</p>
+            <p class="tr">Her terminal oturumu, <strong>rrweb</strong> kullanılarak zaman damgalı terminal olayları dizisi olarak kaydedilir. Yönetici kullanıcılar, kullanıcı davranışlarını tam olarak gerçekleştiği gibi denetlemek için oturumu bir video gibi "tekrardan oynatabilir".</p>
+
+            <div class="alert en">
+                <strong>Forensic Discovery:</strong> Recordings capture shell escapes and hidden inputs, providing 100% visibility into interactive sessions.
+            </div>
+            <div class="alert tr">
+                <strong>Adli Keşif:</strong> Kayıtlar, kabuk kaçışlarını ve gizli girişleri yakalayarak etkileşimli oturumlara %100 görünürlük sağlar.
+            </div>
+        </section>
+
+        <footer style="padding: 4rem 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-dim);">
+            <p>&copy; 2026 Poyraz-K8s Technology. Build safe. Ship fast.</p>
+        </footer>
+    </main>
+
+    <script>
+        function setLang(lang) {
+            document.documentElement.setAttribute('lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            localStorage.setItem('poyraz-modular-lang', lang);
+        }
+
+        // Initialize Lang
+        const savedLang = localStorage.getItem('poyraz-modular-lang') || 'en';
+        setLang(savedLang);
+
+        // Sidebar scroll sync
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const main = document.querySelector('main');
+
+        main.addEventListener('scroll', () => {
+            let current = "";
+            sections.forEach(s => {
+                const top = s.offsetTop;
+                if (main.scrollTop >= top - 200) {
+                    current = s.getAttribute('id');
+                }
+            });
+            navLinks.forEach(l => {
+                l.classList.remove('active');
+                if (l.getAttribute('href').includes(current)) l.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

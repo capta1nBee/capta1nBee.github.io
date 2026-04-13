@@ -1,0 +1,34 @@
+<h1 class="en">Forensic <span>Exec Recorder</span></h1>
+<h1 class="tr">Adli <span>Exec Kaydedici</span></h1>
+
+<p class="en">Terminal accountability required by enterprise compliance (GDPR/KVKK). Every successful shell session is captured interactively as DOM events, allowing exact timing playback.</p>
+<p class="tr">Kurumsal uyumluluk (KVKK/GDPR) tarafından gerektirilen terminal hesap verebilirliği. Her başarılı shell oturumu, kesin zamanlamalı (playback) gösterime olanak tanıyan etkileşimli nesne modeli (DOM) olayları olarak kaydedilir.</p>
+
+<div class="media-container" style="border-color: var(--secondary); max-width: 900px;">
+    <!-- Embedded Video directly from user specified files -->
+    <video controls autoplay loop muted>
+        <source src="image/exec.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<div class="data-panel">
+    <table>
+        <thead>
+            <tr>
+                <th class="en">Recorder Component</th><th class="tr">Kaydedici Bileşen</th>
+                <th class="en">Implementation Specification</th><th class="tr">Uygulama Spesifikasyonu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="en">Session Lifecycle</span><span class="tr">Oturum Yaşam Döngüsü</span></td>
+                <td><span class="en">Tracks <code>ACTIVE</code> vs <code>COMPLETED</code> states linked directly to User ID and Pod/Namespace boundaries.</span><span class="tr">Doğrudan Kullanıcı Kimliği (ID) ve Pod/Namespace sınırlarına bağlı olarak <code>ACTIVE</code> ve <code>COMPLETED</code> durumlarını izler.</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">Time-Series Chunking</span><span class="tr">Zaman Serisi Parçalama</span></td>
+                <td><span class="en">Utilizes <code>rrweb</code> to stream and chunk terminal DOM changes over Websockets directly into the Postgres engine for immutable auditing.</span><span class="tr">Değiştirilemez denetim için terminal DOM değişikliklerini doğrudan Websockets üzerinden Postgres motoruna aktarmak ve parçalamak amacıyla <code>rrweb</code> kullanır.</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,29 @@
+<h1 class="en">eBPF Network <span>Flow Intelligence</span></h1>
+<h1 class="tr">eBPF Ağ <span>Akış İstihbaratı</span></h1>
+
+<p class="en">Poyraz-K8s uses high-performance eBPF technology to map complex cluster communication in real-time, operating entirely within the Linux kernel to bypass Kube-proxy bottlenecks.</p>
+<p class="tr">Poyraz-K8s, Kube-proxy darboğazlarını aşmak için tamamen Linux çekirdeği (kernel) içinde çalışarak karmaşık küme iletişimlerini gerçek zamanlı olarak haritalamak için yüksek performanslı eBPF teknolojisi kullanır.</p>
+
+<div class="img-grid">
+    <div class="media-container" style="border-right-color: var(--accent);">
+        <img src="image/topologcy.png" alt="Kubernetes Real-Time Network Topology">
+    </div>
+    <div class="media-container" style="border-left-color: var(--primary);">
+        <img src="image/policy.png" alt="Kubernetes Network Policy Firewall">
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="info-card">
+        <h4 class="en">"Ping-Pong" Zero-Downtime Router</h4>
+        <h4 class="tr">"Ping-Pong" Sıfır-Downtime Yönlendiricisi</h4>
+        <p class="en" style="font-size:1rem; margin:0;">Uses a Dual-Table Router (Table 1 / Table 2). While the backend aggregates the analytics from Table 1, eBPF continues writing to Table 2 ensuring packet flow analysis is never blocked.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Çift Tablolu Yönlendirici (Table 1 / Table 2) kullanır. Backend (arka uç) Tablo 1'den analitiği toplarken; eBPF, paket akış analizinin asla engellenmemesini sağlamak için Tablo 2'ye yazmaya devam eder.</p>
+    </div>
+    <div class="info-card">
+        <h4 class="en">Firewall Spec Generator</h4>
+        <h4 class="tr">Güvenlik Duvarı Kuralı Oluşturucu</h4>
+        <p class="en" style="font-size:1rem; margin:0;">Analyzes historical flow dimensions (L4/L7) to automatically suggest declarative Kubernetes <code>NetworkPolicy</code> rules to clamp down lateral movement.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Yanal (lateral) hareketleri kısıtlamak amacıyla (declerative) bildirimsel Kubernetes <code>NetworkPolicy</code> kurallarını otomatik olarak önermek için geçmiş akış boyutlarını (L4/L7) analiz eder.</p>
+    </div>
+</div>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poyraz-K8s Sovereign | RBAC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('poyraz-lang') || 'en';
+            setLang(savedLang);
+            document.getElementById("btn-en").addEventListener("click", () => setLang("en"));
+            document.getElementById("btn-tr").addEventListener("click", () => setLang("tr"));
+        });
+        function setLang(lang) {
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            localStorage.setItem('poyraz-lang', lang);
+        }
+    </script>
+</head>
+<body data-lang="en">
+    <aside>
+        <a href="environments.html" class="brand">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="8" stroke="var(--primary)" stroke-width="2.5"/><path d="M16 10V22M10 16H22" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>POYRAZ K8S</span>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-label en">Core Setup</div>
+            <div class="nav-label tr">Temel Kurulum</div>
+            <a href="environments.html" class="nav-link">
+                <span class="en">Environments</span><span class="tr">Ortamlar</span>
+            </a>
+            <a href="install.html" class="nav-link">
+                <span class="en">Installations</span><span class="tr">Kurulumlar</span>
+            </a>
+            <a href="backup.html" class="nav-link">
+                <span class="en">Backup</span><span class="tr">Yedekleme</span>
+            </a>
+            <a href="federation.html" class="nav-link">
+                <span class="en">Federation</span><span class="tr">Federasyon</span>
+            </a>
+            <a href="rbac.html" class="nav-link active">
+                <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Workload Delivery</div>
+            <div class="nav-label tr">İş Yükü Dağıtımı</div>
+            <a href="appcreator.html" class="nav-link">
+                <span class="en">App Creator</span><span class="tr">App Oluşturucu</span>
+            </a>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Ecosystem</span><span class="tr">Helm Ekosistemi</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config & Secrets</span><span class="tr">Config & Secret</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Security Intelligence</div>
+            <div class="nav-label tr">Güvenlik İstihbaratı</div>
+                        <a href="vuln-scan.html" class="nav-link">
+                <span class="en">Vuln Scanner</span><span class="tr">Zafiyet Tarama</span>
+            </a>
+            <a href="cluster-eye.html" class="nav-link">
+                <span class="en">Cluster Eye</span><span class="tr">Cluster Eye</span>
+            </a>
+            <a href="exec.html" class="nav-link">
+                <span class="en">Terminal Exec</span><span class="tr">Terminal Komut</span>
+            </a>
+            <a href="exec-recorder.html" class="nav-link">
+                <span class="en">Exec Recorder</span><span class="tr">Komut Kaydedici</span>
+            </a>
+            <a href="network-flow.html" class="nav-link">
+                <span class="en">Network Flow</span><span class="tr">Ağ Akışı</span>
+            </a>
+        </div>
+        
+        <div class="nav-section">
+            <div class="nav-label en">Analysis</div>
+            <div class="nav-label tr">Analiz</div>
+            <a href="report.html" class="nav-link">
+                <span class="en">Reporting</span><span class="tr">Raporlama</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="content-wrapper">
+        <div class="sticky-header">
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
+            <div class="lang-control">
+                <button id="btn-en" class="lang-btn active">EN</button>
+                <button id="btn-tr" class="lang-btn">TR</button>
+            </div>
+        </div>
+
+        <h1 class="en">Role-Based <span>Authorization</span></h1>
+        <h1 class="tr">Rol Bazlı <span>Yetkilendirme (RBAC)</span></h1>
+
+        <p class="en">Poyraz-K8s uses the powerful <strong>Casbin Engine</strong> to implement extremely granular, multi-dimensional security policies. Unlike standard Kubernetes RBAC, Poyraz RBAC is fully "Cluster-Aware" across your federated environments.</p>
+        <p class="tr">Poyraz-K8s, son derece hassas ve çok boyutlu güvenlik politikaları uygulamak için güçlü <strong>Casbin Motoru (Casbin Engine)</strong> kullanır. Standart Kubernetes RBAC sisteminin aksine, Poyraz RBAC, federatif ortamlarınızda tamamen "Küme Duyarlıdır (Cluster-Aware)".</p>
+
+        <div class="info-card" style="margin-top: 3rem; background:rgba(0,0,0,0.3)">
+            <div style="display: flex; gap:20px; align-items:flex-start; margin-bottom: 1.5rem;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; flex-shrink:0;">1</div>
+                <div>
+                    <h4 class="en" style="margin:0; margin-bottom:5px;">The 5-Tuple Policy Pattern</h4>
+                    <h4 class="tr" style="margin:0; margin-bottom:5px;">5 Boyutlu Politika Modeli</h4>
+                    <p class="en" style="margin:0;"><code>[ subject, domain(cluster_uid), namespace, object, action ]</code>. Every user action must satisfy these 5 dynamic conditions.</p>
+                    <p class="tr" style="margin:0;"><code>[ özne, domain(küme_uid), namespace, nesne, eylem ]</code>. Her kullanıcı eylemi bu 5 dinamik koşulu sağlamalıdır.</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap:20px; align-items:flex-start; margin-bottom: 1.5rem;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; flex-shrink:0;">2</div>
+                <div>
+                    <h4 class="en" style="margin:0; margin-bottom:5px;">Cluster (Domain) Isolation</h4>
+                    <h4 class="tr" style="margin:0; margin-bottom:5px;">Küme İzolasyonu</h4>
+                    <p class="en" style="margin:0;">If User A has "Admin" rights on Cluster X, they are still fundamentally blocked from even viewing Cluster Y, unless a specific Domain binding exists.</p>
+                    <p class="tr" style="margin:0;">Eğer Kullanıcı A'nın X Kümesinde "Admin" hakları varsa bile, Y Kümesini görüntülemesi (özel bir Domain bağlamı yoksa) temelden engellenir.</p>
+                </div>
+            </div>
+
+            <div style="display: flex; gap:20px; align-items:flex-start;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; flex-shrink:0;">3</div>
+                <div>
+                    <h4 class="en" style="margin:0; margin-bottom:5px;">Wildcard Engine</h4>
+                    <h4 class="tr" style="margin:0; margin-bottom:5px;">Joker Karakter Motoru</h4>
+                    <p class="en" style="margin:0;">Specific namespaces can be restricted via RegEx patterns (e.g. <code>prod-*</code> vs <code>dev-*</code>). Allowing devs access exclusively to testing namespaces.</p>
+                    <p class="tr" style="margin:0;">Belirli ad alanları (namespaces) RegEx pattern'leri ile sınırlandırılabilir (örneğin <code>prod-*</code> ile <code>dev-*</code> ayrımı). Geliştiricilere sadece test alanlarında yetki verilebilir.</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="en">Casbin Specifications</h3>
+        <h3 class="tr">Casbin Spesifikasyonları</h3>
+
+        <div class="data-panel">
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="color:var(--primary); font-weight:bold;">Policy Example</td>
+                        <td><code>p, viewer-role, clstr-8f4b, *, page:Terminal, access</code><br><br>
+                        <span class="en">The Viewer Role, ONLY inside Cluster "clstr-8f4b", in any Namespace (*), can access the Terminal page.</span>
+                        <span class="tr">Viewer (Görüntüleyici) Rolü, SADECE "clstr-8f4b" Kümesinde, herhangi bir isim alanında (*), Terminal sayfasına erişebilir.</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--primary); font-weight:bold;">Role Binding</td>
+                        <td><code>g, john.doe, viewer-role, clstr-8f4b</code><br><br>
+                        <span class="en">John Doe is securely linked to the Viewer Role, tied exclusively to that Cluster UID.</span>
+                        <span class="tr">John Doe, Viewer Rolüne bağlanmış ve sadece o Küme UID'sine özel yetkilendirilmiştir.</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="grid-2">
+            <div class="info-card">
+                <h4 class="en">Superadmin Bypass</h4>
+                <h4 class="tr">Süper-Admin Otoritesi</h4>
+                <p class="en" style="font-size:1rem; margin:0;">Superadmin flags bypass all Casbin routing. A user mapped to the <code>SUPERADMIN</code> global domain <code>*</code> has unfiltered access to every attached Kubeconfig and UI metric.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Superadmin yetkisi tüm Casbin denetimlerini atlatır (bypass). Küresel domain (<code>*</code>) üzerine eşlenmiş <code>SUPERADMIN</code> her Kubeconfig ve metrik arayüzüne filtresiz erişime sahiptir.</p>
+            </div>
+            <div class="info-card">
+                <h4 class="en">Multi-Tenancy Guard</h4>
+                <h4 class="tr">Çoklu Kiracı (Multi-Tenancy) Koruması</h4>
+                <p class="en" style="font-size:1rem; margin:0;">The Backend prevents memory-leaks of Kubeconfigs. A user session executing a deploy only has the specific cluster authorization injected right before task initiation.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Backend sistemi Kubeconfig sızıntılarını engeller. Deploy (dağıtım) gerçekleştiren bir kullanıcı oturumuna, görev başlamadan saniyeler önce sadece kendisinin yetkili olduğu küme konfigürasyonu (Kubeconfig) enjekte edilir.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

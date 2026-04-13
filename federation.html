@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poyraz-K8s Sovereign | Federation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('poyraz-lang') || 'en';
+            setLang(savedLang);
+            document.getElementById("btn-en").addEventListener("click", () => setLang("en"));
+            document.getElementById("btn-tr").addEventListener("click", () => setLang("tr"));
+        });
+        function setLang(lang) {
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            localStorage.setItem('poyraz-lang', lang);
+        }
+    </script>
+</head>
+<body data-lang="en">
+    <aside>
+        <a href="environments.html" class="brand">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="8" stroke="var(--primary)" stroke-width="2.5"/><path d="M16 10V22M10 16H22" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>POYRAZ K8S</span>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-label en">Core Setup</div>
+            <div class="nav-label tr">Temel Kurulum</div>
+            <a href="environments.html" class="nav-link">
+                <span class="en">Environments</span><span class="tr">Ortamlar</span>
+            </a>
+            <a href="install.html" class="nav-link">
+                <span class="en">Installations</span><span class="tr">Kurulumlar</span>
+            </a>
+            <a href="backup.html" class="nav-link">
+                <span class="en">Backup</span><span class="tr">Yedekleme</span>
+            </a>
+            <a href="federation.html" class="nav-link active">
+                <span class="en">Federation</span><span class="tr">Federasyon</span>
+            </a>
+            <a href="rbac.html" class="nav-link">
+                <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Workload Delivery</div>
+            <div class="nav-label tr">İş Yükü Dağıtımı</div>
+            <a href="appcreator.html" class="nav-link">
+                <span class="en">App Creator</span><span class="tr">App Oluşturucu</span>
+            </a>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Ecosystem</span><span class="tr">Helm Ekosistemi</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config & Secrets</span><span class="tr">Config & Secret</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Security Intelligence</div>
+            <div class="nav-label tr">Güvenlik İstihbaratı</div>
+                        <a href="vuln-scan.html" class="nav-link">
+                <span class="en">Vuln Scanner</span><span class="tr">Zafiyet Tarama</span>
+            </a>
+            <a href="cluster-eye.html" class="nav-link">
+                <span class="en">Cluster Eye</span><span class="tr">Cluster Eye</span>
+            </a>
+            <a href="exec.html" class="nav-link">
+                <span class="en">Terminal Exec</span><span class="tr">Terminal Komut</span>
+            </a>
+            <a href="exec-recorder.html" class="nav-link">
+                <span class="en">Exec Recorder</span><span class="tr">Komut Kaydedici</span>
+            </a>
+            <a href="network-flow.html" class="nav-link">
+                <span class="en">Network Flow</span><span class="tr">Ağ Akışı</span>
+            </a>
+        </div>
+        
+        <div class="nav-section">
+            <div class="nav-label en">Analysis</div>
+            <div class="nav-label tr">Analiz</div>
+            <a href="report.html" class="nav-link">
+                <span class="en">Reporting</span><span class="tr">Raporlama</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="content-wrapper">
+        <div class="sticky-header">
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
+            <div class="lang-control">
+                <button id="btn-en" class="lang-btn active">EN</button>
+                <button id="btn-tr" class="lang-btn">TR</button>
+            </div>
+        </div>
+
+        <h1 class="en">The <span>Federation</span> Watcher</h1>
+        <h1 class="tr"><span>Federasyon</span> Gözlemcisi</h1>
+
+        <p class="en">The Federation module implements a <strong>Source-of-Truth Resource Broadcast</strong> pattern. It establishes a master-member paradigm where infrastructure state is synchronously mirrored across distinct K8s clusters effortlessly.</p>
+        <p class="tr">Federasyon modülü, bir <strong>Tek Doğruluk Kaynağı Kaynak Yayını</strong> pattern'ini uygular. Altyapı durumunun farklı K8s kümelerinde senkronize ve zahmetsiz olarak yansıtıldığı bir master-member (ana-üye) paradigması oluşturur.</p>
+
+        <div class="img-grid" style="margin-top: 2rem;">
+            <div class="media-container" style="border-width: 2px; border-color: var(--primary);">
+                <img src="image/federation-1.png" alt="Federation Master Sync Board">
+            </div>
+            <div class="media-container" style="border-width: 2px; border-color: var(--secondary);">
+                <img src="image/federation-2.png" alt="Federation Resource Selectors">
+            </div>
+        </div>
+
+        <div class="logic-flow" style="margin-top: 3rem;">
+            <div class="flow-step" style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 2rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                <div class="step-num" style="background:var(--secondary); color:white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight:bold;">1</div>
+                <div>
+                    <div class="en"><b>Master Discovery</b>: High-performance <code>genericKubernetesResources</code> API watches applied manifests on the designated Master cluster.</div>
+                    <div class="tr"><b>Master Keşfi</b>: Yüksek performanslı <code>genericKubernetesResources</code> API'si, belirlenen Master kümesi üzerindeki uygulanan manifestleri izler.</div>
+                </div>
+            </div>
+            <div class="flow-step" style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 2rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                <div class="step-num" style="background:var(--accent); color:white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight:bold;">2</div>
+                <div>
+                    <div class="en"><b>Recursive Sync</b>: Identifies deeply nested <code>ConfigMapRef</code>, <code>SecretRef</code>, and <code>ServiceSelectors</code>. Broadcsts dependencies *first* to prevent crashlooping.</div>
+                    <div class="tr"><b>Yinelemeli Senk</b>: Derinlemesine yuvalanmış <code>ConfigMapRef</code>, <code>SecretRef</code> ve <code>ServiceSelectors</code>'leri belirler. Crashlooping'i önlemek için bağımlılıkları düzenli olarak *önce* yayınlar.</div>
+                </div>
+            </div>
+            <div class="flow-step" style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 2rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                <div class="step-num" style="background:var(--primary); color:white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight:bold;">3</div>
+                <div>
+                    <div class="en"><b>Server-Side Apply</b>: Uses the <code>poyraz-federation</code> FieldManager to natively apply state with built-in conflict resolution directly inside the destination K8s API server.</div>
+                    <div class="tr"><b>Sunucu Tarafı Uygulama (SSA)</b>: Çakışma çözümünü K8s API sunucusu içinde doğrudan yerel olarak ele almak için <code>poyraz-federation</code> FieldManager kullanır.</div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="en">Architectural Benefits</h3>
+        <h3 class="tr">Mimari Avantajlar</h3>
+
+        <div class="grid-2">
+            <div class="info-card">
+                <h4 class="en">Zero Drift Enforecement</h4>
+                <h4 class="tr">Sıfır-Sapma Dayatması</h4>
+                <p class="en" style="font-size:1rem; margin:0;">Any manual modifications made directly in a member cluster are instantly detected as drift and immediately overwritten to match the Master's state.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Bir üye kümesinde (member cluster) doğrudan yapılan herhangi bir manuel değişiklik anında 'sapma' olarak algılanır ve Master kümenin durumuna uyması için anında ezilir (overwritten).</p>
+            </div>
+            <div class="info-card">
+                <h4 class="en">Network Agnostic</h4>
+                <h4 class="tr">Ağ Bağımsızlığı</h4>
+                <p class="en" style="font-size:1rem; margin:0;">No specific VPN mesh or internal subnet routing is required. Kubeconfig distribution acts as the only secure tunnel required for broadcasting manifests.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Belirli bir VPN ağı (mesh) veya dahili alt ağ yönlendirmesi (subnet routing) gerekmez. Kubeconfig dağıtımı, manifestleri yayınlamak için gereken tek güvenli tünel görevi görür.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

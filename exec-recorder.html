@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poyraz-K8s Sovereign | Exec Recorder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('poyraz-lang') || 'en';
+            setLang(savedLang);
+            document.getElementById("btn-en").addEventListener("click", () => setLang("en"));
+            document.getElementById("btn-tr").addEventListener("click", () => setLang("tr"));
+        });
+        function setLang(lang) {
+            document.body.setAttribute('data-lang', lang);
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            localStorage.setItem('poyraz-lang', lang);
+        }
+    </script>
+</head>
+<body data-lang="en">
+    <aside>
+        <a href="environments.html" class="brand">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="8" stroke="var(--primary)" stroke-width="2.5"/><path d="M16 10V22M10 16H22" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>POYRAZ K8S</span>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-label en">Core Setup</div>
+            <div class="nav-label tr">Temel Kurulum</div>
+            <a href="environments.html" class="nav-link">
+                <span class="en">Environments</span><span class="tr">Ortamlar</span>
+            </a>
+            <a href="install.html" class="nav-link">
+                <span class="en">Installations</span><span class="tr">Kurulumlar</span>
+            </a>
+            <a href="backup.html" class="nav-link">
+                <span class="en">Backup</span><span class="tr">Yedekleme</span>
+            </a>
+            <a href="federation.html" class="nav-link">
+                <span class="en">Federation</span><span class="tr">Federasyon</span>
+            </a>
+            <a href="rbac.html" class="nav-link">
+                <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Workload Delivery</div>
+            <div class="nav-label tr">İş Yükü Dağıtımı</div>
+            <a href="appcreator.html" class="nav-link">
+                <span class="en">App Creator</span><span class="tr">App Oluşturucu</span>
+            </a>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Ecosystem</span><span class="tr">Helm Ekosistemi</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config & Secrets</span><span class="tr">Config & Secret</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Security Intelligence</div>
+            <div class="nav-label tr">Güvenlik İstihbaratı</div>
+                        <a href="vuln-scan.html" class="nav-link">
+                <span class="en">Vuln Scanner</span><span class="tr">Zafiyet Tarama</span>
+            </a>
+            <a href="cluster-eye.html" class="nav-link">
+                <span class="en">Cluster Eye</span><span class="tr">Cluster Eye</span>
+            </a>
+            <a href="exec.html" class="nav-link">
+                <span class="en">Terminal Exec</span><span class="tr">Terminal Komut</span>
+            </a>
+            <a href="exec-recorder.html" class="nav-link active">
+                <span class="en">Exec Recorder</span><span class="tr">Komut Kaydedici</span>
+            </a>
+            <a href="network-flow.html" class="nav-link">
+                <span class="en">Network Flow</span><span class="tr">Ağ Akışı</span>
+            </a>
+        </div>
+        
+        <div class="nav-section">
+            <div class="nav-label en">Analysis</div>
+            <div class="nav-label tr">Analiz</div>
+            <a href="report.html" class="nav-link">
+                <span class="en">Reporting</span><span class="tr">Raporlama</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="content-wrapper">
+        <div class="sticky-header">
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
+            <div class="lang-control">
+                <button id="btn-en" class="lang-btn active">EN</button>
+                <button id="btn-tr" class="lang-btn">TR</button>
+            </div>
+        </div>
+
+        <h1 class="en">Forensic <span>Exec Recorder</span></h1>
+        <h1 class="tr">Adli <span>Exec Kaydedici</span></h1>
+
+        <p class="en">Terminal accountability required by enterprise compliance (GDPR/KVKK). Every successful shell session is captured interactively as DOM events, allowing exact timing playback.</p>
+        <p class="tr">Kurumsal uyumluluk (KVKK/GDPR) tarafından gerektirilen terminal hesap verebilirliği. Her başarılı shell oturumu, kesin zamanlamalı (playback) gösterime olanak tanıyan etkileşimli nesne modeli (DOM) olayları olarak kaydedilir.</p>
+
+        <div class="media-container" style="border-color: var(--secondary); max-width: 900px;">
+            <video controls autoplay loop muted>
+                <source src="image/exec.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Recorder Component</th><th class="tr">Kaydedici Bileşen</th>
+                        <th class="en">Implementation Specification</th><th class="tr">Uygulama Spesifikasyonu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="en">Session Lifecycle</span><span class="tr">Oturum Yaşam Döngüsü</span></td>
+                        <td><span class="en">Tracks <code>ACTIVE</code> vs <code>COMPLETED</code> states linked directly to User ID and Pod/Namespace boundaries.</span><span class="tr">Doğrudan Kullanıcı Kimliği (ID) ve Pod/Namespace sınırlarına bağlı olarak <code>ACTIVE</code> ve <code>COMPLETED</code> durumlarını izler.</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="en">Time-Series Chunking</span><span class="tr">Zaman Serisi Parçalama</span></td>
+                        <td><span class="en">Utilizes <code>rrweb</code> to stream and chunk terminal DOM changes over Websockets directly into the Postgres engine for immutable auditing.</span><span class="tr">Değiştirilemez denetim için terminal DOM değişikliklerini doğrudan Websockets üzerinden Postgres motoruna aktarmak ve parçalamak amacıyla <code>rrweb</code> kullanır.</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

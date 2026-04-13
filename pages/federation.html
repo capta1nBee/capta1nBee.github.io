@@ -1,0 +1,50 @@
+<h1 class="en">The <span>Federation</span> Watcher</h1>
+<h1 class="tr"><span>Federasyon</span> Gözlemcisi</h1>
+
+<p class="en">The Federation module implements a <strong>Source-of-Truth Resource Broadcast</strong> pattern. It establishes a master-member paradigm where infrastructure state is synchronously mirrored across distinct K8s clusters effortlessly.</p>
+<p class="tr">Federasyon modülü, bir <strong>Tek Doğruluk Kaynağı Kaynak Yayını</strong> pattern'ini uygular. Altyapı durumunun farklı K8s kümelerinde senkronize ve zahmetsiz olarak yansıtıldığı bir master-member (ana-üye) paradigması oluşturur.</p>
+
+<div class="img-grid" style="margin-top: 2rem;">
+    <div class="media-container" style="border-width: 2px; border-color: var(--primary);">
+        <img src="image/federation-1.png" alt="Federation Master Sync Board">
+    </div>
+    <div class="media-container" style="border-width: 2px; border-color: var(--secondary);">
+        <img src="image/federation-2.png" alt="Federation Resource Selectors">
+    </div>
+</div>
+
+<div class="logic-flow" style="margin-top: 3rem;">
+    <div class="flow-step">
+        <div class="step-num" style="background:var(--secondary)">1</div>
+        <div class="en"><b>Master Discovery</b>: High-performance <code>genericKubernetesResources</code> API watches applied manifests on the designated Master cluster.</div>
+        <div class="tr"><b>Master Keşfi</b>: Yüksek performanslı <code>genericKubernetesResources</code> API'si, belirlenen Master kümesi üzerindeki uygulanan manifestleri izler.</div>
+    </div>
+    <div class="flow-step">
+        <div class="step-num" style="background:var(--accent)">2</div>
+        <div class="en"><b>Recursive Sync</b>: Identifies deeply nested <code>ConfigMapRef</code>, <code>SecretRef</code>, and <code>ServiceSelectors</code>. Broadcsts dependencies *first* to prevent crashlooping.</div>
+        <div class="tr"><b>Yinelemeli Senk</b>: Derinlemesine yuvalanmış <code>ConfigMapRef</code>, <code>SecretRef</code> ve <code>ServiceSelectors</code>'leri belirler. Crashlooping'i önlemek için bağımlılıkları düzenli olarak *önce* yayınlar.</div>
+    </div>
+    <div class="flow-step">
+        <div class="step-num" style="background:var(--primary)">3</div>
+        <div class="en"><b>Server-Side Apply</b>: Uses the <code>poyraz-federation</code> FieldManager to natively apply state with built-in conflict resolution directly inside the destination K8s API server.</div>
+        <div class="tr"><b>Sunucu Tarafı Uygulama (SSA)</b>: Çakışma çözümünü K8s API sunucusu içinde doğrudan yerel olarak ele almak için <code>poyraz-federation</code> FieldManager kullanır.</div>
+    </div>
+</div>
+
+<h3 class="en">Architectural Benefits</h3>
+<h3 class="tr">Mimari Avantajlar</h3>
+
+<div class="grid-2">
+    <div class="info-card">
+        <h4 class="en">Zero Drift Enforecement</h4>
+        <h4 class="tr">Sıfır-Sapma Dayatması</h4>
+        <p class="en" style="font-size:1rem; margin:0;">Any manual modifications made directly in a member cluster are instantly detected as drift and immediately overwritten to match the Master's state.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Bir üye kümesinde (member cluster) doğrudan yapılan herhangi bir manuel değişiklik anında 'sapma' olarak algılanır ve Master kümenin durumuna uyması için anında ezilir (overwritten).</p>
+    </div>
+    <div class="info-card">
+        <h4 class="en">Network Agnostic</h4>
+        <h4 class="tr">Ağ Bağımsızlığı</h4>
+        <p class="en" style="font-size:1rem; margin:0;">No specific VPN mesh or internal subnet routing is required. Kubeconfig distribution acts as the only secure tunnel required for broadcasting manifests.</p>
+        <p class="tr" style="font-size:1rem; margin:0;">Belirli bir VPN ağı (mesh) veya dahili alt ağ yönlendirmesi (subnet routing) gerekmez. Kubeconfig dağıtımı, manifestleri yayınlamak için gereken tek güvenli tünel görevi görür.</p>
+    </div>
+</div>
