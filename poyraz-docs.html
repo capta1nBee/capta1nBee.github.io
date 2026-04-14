@@ -128,8 +128,8 @@
 
     <main>
         <div class="top-bar">
-            <div class="en" style="color: var(--text-dim); font-weight: 500;">Technical Documentation Hub</div>
-            <div class="tr" style="color: var(--text-dim); font-weight: 500;">Teknik Dokümantasyon Merkezi</div>
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
             <div class="lang-toggle">
                 <button id="btn-en" class="lang-btn" onclick="setLang('en')">EN</button>
                 <button id="btn-tr" class="lang-btn" onclick="setLang('tr')">TR</button>
@@ -167,6 +167,30 @@
                     <h3 class="tr">🤖 Yapay Zeka Analisti</h3>
                     <p class="en">Integrated LLM (Ollama) that consumes cluster logs and metrics to provide root-cause analysis and health insights.</p>
                     <p class="tr">Kök neden analizi ve sağlık öngörüleri sağlamak için küme günlüklerini ve metriklerini tüketen entegre LLM (Ollama).</p>
+                </div>
+            </div>
+
+            <h3 class="en" style="margin-top:4rem;">360° Cloud Observability</h3>
+            <h3 class="tr" style="margin-top:4rem;">360° Bulut Gözlemlenebilirliği</h3>
+            
+            <div class="module-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="module-card" style="padding:0; overflow:hidden; border-color: var(--primary);">
+                    <img src="image/pod-metric.png" style="width:100%; display:block;">
+                    <div style="padding:1rem;">
+                        <h4 class="en">Metric Analytics</h4>
+                        <h4 class="tr">Metrik Analitiği</h4>
+                        <p class="en">Real-time CPU/RAM saturation per container.</p>
+                        <p class="tr">Konteyner başına gerçek zamanlı CPU/RAM doygunluğu.</p>
+                    </div>
+                </div>
+                <div class="module-card" style="padding:0; overflow:hidden; border-color: var(--secondary);">
+                    <img src="image/pod-logs.png" style="width:100%; display:block;">
+                    <div style="padding:1rem;">
+                        <h4 class="en">Log Streaming</h4>
+                        <h4 class="tr">Log Akışı</h4>
+                        <p class="en">Live console outputs for instant debugging.</p>
+                        <p class="tr">Anında hata ayıklama için canlı konsol çıktıları.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -210,7 +234,9 @@ docker-compose up -d --build
                     </thead>
                     <tbody>
                         <tr><td><code>SERVER_PORT</code></td><td>8686</td><td>Backend</td><td class="en">Spring Boot API Port</td><td class="tr">Backend API portu</td></tr>
-                        <tr><td><code>DATABASE_PATH</code></td><td>./data/k8s</td><td>Backend</td><td class="en">H2 file path for persistence</td><td class="tr">Kalıcı depolama için H2 dosya yolu</td></tr>
+                        <tr><td><code>POSTGRES_DB</code></td><td>k8s_platform</td><td>Backend</td><td class="en">PostgreSQL Database Name</td><td class="tr">PostgreSQL Veritabanı Adı</td></tr>
+                        <tr><td><code>POSTGRES_USER</code></td><td>k8s_user</td><td>Backend</td><td class="en">PostgreSQL Username</td><td class="tr">PostgreSQL Kullanıcı Adı</td></tr>
+                        <tr><td><code>POSTGRES_PASSWORD</code></td><td>admin123postgres</td><td>Backend</td><td class="en">PostgreSQL Password</td><td class="tr">PostgreSQL Şifresi</td></tr>
                         <tr><td><code>AGENT_API_KEY</code></td><td>-</td><td>Both</td><td class="en">Secret key for agent communication</td><td class="tr">Ajan iletişimi için gizli anahtar</td></tr>
                         <tr><td><code>VULN_SCAN_PATH</code></td><td>trivy</td><td>Backend</td><td class="en">Path to Trivy binary</td><td class="tr">Trivy binary dosyasının yolu</td></tr>
                         <tr><td><code>JWT_SECRET</code></td><td>-</td><td>Backend</td><td class="en">Auth token signing key</td><td class="tr">Kimlik doğrulama anahtarı</td></tr>

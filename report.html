@@ -8,17 +8,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const savedLang = localStorage.getItem('poyraz-lang') || 'en';
             setLang(savedLang);
-            document.getElementById("btn-en").addEventListener("click", () => setLang("en"));
-            document.getElementById("btn-tr").addEventListener("click", () => setLang("tr"));
         });
         function setLang(lang) {
-            document.body.setAttribute('data-lang', lang);
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + lang).classList.add('active');
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            const enElements = document.querySelectorAll('.en');
+            const trElements = document.querySelectorAll('.tr');
+            
+            if (lang === 'en') {
+                if(btnEn) btnEn.classList.add('active');
+                if(btnTr) btnTr.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'inline-block');
+                trElements.forEach(el => el.style.display = 'none');
+                document.body.setAttribute('data-lang', 'en');
+            } else {
+                if(btnTr) btnTr.classList.add('active');
+                if(btnEn) btnEn.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'none');
+                trElements.forEach(el => el.style.display = 'inline-block');
+                document.body.setAttribute('data-lang', 'tr');
+            }
             localStorage.setItem('poyraz-lang', lang);
         }
     </script>
@@ -36,8 +50,11 @@
             <a href="environments.html" class="nav-link">
                 <span class="en">Environments</span><span class="tr">Ortamlar</span>
             </a>
+            <a href="quick-install.html" class="nav-link">
+                <span class="en">Quick Install</span><span class="tr">Hızlı Kurulum</span>
+            </a>
             <a href="install.html" class="nav-link">
-                <span class="en">Installations</span><span class="tr">Kurulumlar</span>
+                <span class="en">Detailed Install</span><span class="tr">Detaylı Kurulum</span>
             </a>
             <a href="backup.html" class="nav-link">
                 <span class="en">Backup</span><span class="tr">Yedekleme</span>
@@ -47,6 +64,17 @@
             </a>
             <a href="rbac.html" class="nav-link">
                 <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Agent Configuration</div>
+            <div class="nav-label tr">Ajan Yapılandırması</div>
+            <a href="network-config.html" class="nav-link">
+                <span class="en">Network Agent Config</span><span class="tr">Ağ Ajanı Yapılandırması</span>
+            </a>
+            <a href="runtime-config.html" class="nav-link">
+                <span class="en">Runtime Agent Config</span><span class="tr">Runtime Ajanı Yapılandırması</span>
             </a>
         </div>
 
@@ -113,10 +141,20 @@
             <img src="image/report.png" alt="Kubernetes High-Level Cluster Report">
         </div>
 
-        <h3 class="en" style="margin-top:4rem;">Correlated Pod Metrology</h3>
-        <h3 class="tr" style="margin-top:4rem;">Korele Pod Metrolojisi</h3>
-        <div class="media-container" style="max-width:800px;">
-            <img src="image/pod-metric.png" alt="Pod Level Metric Analysis">
+        <h3 class="en" style="margin-top:4rem;">Correlated Pod Observability</h3>
+        <h3 class="tr" style="margin-top:4rem;">Korele Pod Gözlemlenebilirliği</h3>
+        
+        <div class="img-grid" style="margin-top: 2rem;">
+            <div class="media-container" style="border-color: var(--primary);">
+                <img src="image/pod-metric.png" alt="Pod Level Metric Analysis">
+                <div class="en" style="padding: 10px; font-size: 0.9rem; color: var(--text-dim); text-align: center;">Live Performance Metrics</div>
+                <div class="tr" style="padding: 10px; font-size: 0.9rem; color: var(--text-dim); text-align: center;">Canlı Performans Metrikleri</div>
+            </div>
+            <div class="media-container" style="border-color: var(--secondary);">
+                <img src="image/pod-logs.png" alt="Pod Level Log Analysis">
+                <div class="en" style="padding: 10px; font-size: 0.9rem; color: var(--text-dim); text-align: center;">Real-Time Console Logs</div>
+                <div class="tr" style="padding: 10px; font-size: 0.9rem; color: var(--text-dim); text-align: center;">Gerçek Zamanlı Konsol Logları</div>
+            </div>
         </div>
 
         <div class="data-panel">
@@ -139,6 +177,30 @@
                 </tbody>
             </table>
         </div>
+        <script>
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            btnEn.onclick = () => setLang('en');
+            btnTr.onclick = () => setLang('tr');
+
+            // Copy to clipboard functionality
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.onclick = () => {
+                    const container = button.parentElement;
+                    const code = container.querySelector('code') || container.querySelector('pre');
+                    const text = code.innerText;
+
+                    navigator.clipboard.writeText(text).then(() => {
+                        button.innerText = 'Copied!';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.innerText = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    });
+                };
+            });
+        </script>
     </main>
 </body>
 </html>

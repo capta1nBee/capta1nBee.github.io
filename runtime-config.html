@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Runtime Security Configuration - Poyraz K8s Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('poyraz-lang') || 'en';
+            setLang(savedLang);
+        });
+        function setLang(lang) {
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            const enElements = document.querySelectorAll('.en');
+            const trElements = document.querySelectorAll('.tr');
+            
+            if (lang === 'en') {
+                if(btnEn) btnEn.classList.add('active');
+                if(btnTr) btnTr.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'inline-block');
+                trElements.forEach(el => el.style.display = 'none');
+                document.body.setAttribute('data-lang', 'en');
+            } else {
+                if(btnTr) btnTr.classList.add('active');
+                if(btnEn) btnEn.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'none');
+                trElements.forEach(el => el.style.display = 'inline-block');
+                document.body.setAttribute('data-lang', 'tr');
+            }
+            localStorage.setItem('poyraz-lang', lang);
+        }
+    </script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside>
+        <a href="environments.html" class="brand">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="8" stroke="var(--primary)" stroke-width="2.5"/><path d="M16 10V22M10 16H22" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>POYRAZ K8S</span>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-label en">Core Setup</div>
+            <div class="nav-label tr">Temel Kurulum</div>
+            <a href="environments.html" class="nav-link">
+                <span class="en">Environments</span><span class="tr">Ortamlar</span>
+            </a>
+            <a href="quick-install.html" class="nav-link">
+                <span class="en">Quick Install</span><span class="tr">Hızlı Kurulum</span>
+            </a>
+            <a href="install.html" class="nav-link">
+                <span class="en">Detailed Install</span><span class="tr">Detaylı Kurulum</span>
+            </a>
+            <a href="backup.html" class="nav-link">
+                <span class="en">Backup</span><span class="tr">Yedekleme</span>
+            </a>
+            <a href="federation.html" class="nav-link">
+                <span class="en">Federation</span><span class="tr">Federasyon</span>
+            </a>
+            <a href="rbac.html" class="nav-link">
+                <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Agent Configuration</div>
+            <div class="nav-label tr">Ajan Yapılandırması</div>
+            <a href="network-config.html" class="nav-link">
+                <span class="en">Network Agent Config</span><span class="tr">Ağ Ajanı Yapılandırması</span>
+            </a>
+            <a href="runtime-config.html" class="nav-link active">
+                <span class="en">Runtime Agent Config</span><span class="tr">Runtime Ajanı Yapılandırması</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Workload Delivery</div>
+            <div class="nav-label tr">İş Yükü Dağıtımı</div>
+            <a href="appcreator.html" class="nav-link">
+                <span class="en">App Creator</span><span class="tr">App Oluşturucu</span>
+            </a>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Ecosystem</span><span class="tr">Helm Ekosistemi</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config & Secrets</span><span class="tr">Config & Secret</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Security Intelligence</div>
+            <div class="nav-label tr">Güvenlik İstihbaratı</div>
+            <a href="vuln-scan.html" class="nav-link">
+                <span class="en">Vuln Scanner</span><span class="tr">Zafiyet Tarama</span>
+            </a>
+            <a href="cluster-eye.html" class="nav-link">
+                <span class="en">Cluster Eye</span><span class="tr">Cluster Eye</span>
+            </a>
+            <a href="exec.html" class="nav-link">
+                <span class="en">Terminal Exec</span><span class="tr">Terminal Komut</span>
+            </a>
+            <a href="exec-recorder.html" class="nav-link">
+                <span class="en">Exec Recorder</span><span class="tr">Komut Kaydedici</span>
+            </a>
+            <a href="network-flow.html" class="nav-link">
+                <span class="en">Network Flow</span><span class="tr">Ağ Akışı</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Analytics & Insights</div>
+            <div class="nav-label tr">Analitik ve İçgörüler</div>
+            <a href="report.html" class="nav-link">
+                <span class="en">Reports</span><span class="tr">Raporlar</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-wrapper">
+        <div class="sticky-header">
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
+            <div class="lang-control">
+                <button id="btn-en" class="lang-btn active">EN</button>
+                <button id="btn-tr" class="lang-btn">TR</button>
+            </div>
+        </div>
+
+        <h1 class="en">Runtime Security <span>Configuration</span></h1>
+        <h1 class="tr">Runtime Güvenlik <span>Yapılandırması</span></h1>
+
+        <p class="en" style="font-size:1.2rem;">Configure the advanced eBPF-based runtime security agent that monitors system calls and enforces exec-allow policies across your Kubernetes cluster. All settings are managed through the runtime-security-config ConfigMap.</p>
+        <p class="tr" style="font-size:1.2rem;">Kubernetes kümenizde sistem çağrılarını izleyen ve exec-allow politikalarını uygulayan gelişmiş eBPF tabanlı runtime güvenlik ajanını yapılandırın. Tüm ayarlar runtime-security-config ConfigMap aracılığıyla yönetilir.</p>
+
+        <div class="info-card" style="border-top: 4px solid var(--danger);">
+            <h4 class="en">⚠️ Kernel Requirements</h4>
+            <h4 class="tr">⚠️ Çekirdek Gereksinimleri</h4>
+            <p class="en"><strong>Kernel 5.8+</strong> has been thoroughly tested and is strongly recommended. Earlier versions may not support advanced eBPF features like BPF RingBuf.</p>
+            <p class="tr"><strong>Kernel 5.8+</strong> kapsamlı olarak test edilmiş ve şiddetle önerilir. Önceki sürümler BPF RingBuf gibi gelişmiş eBPF özelliklerini desteklemeyebilir.</p>
+        </div>
+
+        <h3 class="en">ConfigMap Overview</h3>
+        <h3 class="tr">ConfigMap Genel Bakış</h3>
+
+        <p class="en">The runtime security agent reads its configuration from the <code>runtime-security-config</code> ConfigMap in the <code>poyraz-runtime-security</code> namespace. This configuration controls system call monitoring, alerting, and backend integration.</p>
+        <p class="tr">Runtime güvenlik ajanı yapılandırmasını <code>poyraz-runtime-security</code> namespace'indeki <code>runtime-security-config</code> ConfigMap'inden okur. Bu yapılandırma sistem çağrısı izleme, uyarı ve backend entegrasyonunu kontrol eder.</p>
+
+        <h3 class="en">Application Settings</h3>
+        <h3 class="tr">Uygulama Ayarları</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>APP_NAME</code></td>
+                        <td><span class="en">Application identifier</span><span class="tr">Uygulama tanımlayıcısı</span></td>
+                        <td><code>runtime-security</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>VERSION</code></td>
+                        <td><span class="en">Agent version</span><span class="tr">Ajan sürümü</span></td>
+                        <td><code>2.0.0</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ENVIRONMENT</code></td>
+                        <td><span class="en">Deployment environment</span><span class="tr">Dağıtım ortamı</span></td>
+                        <td><code>production</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Backend API Configuration</h3>
+        <h3 class="tr">Backend API Yapılandırması</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Example</th><th class="tr">Örnek</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>BACKEND__BASE_URL</code></td>
+                        <td><span class="en">Backend API base URL</span><span class="tr">Backend API temel URL'si</span></td>
+                        <td><code>http://backend-ip:8686</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>BACKEND__TIMEOUT</code></td>
+                        <td><span class="en">API request timeout (seconds)</span><span class="tr">API istek zaman aşımı (saniye)</span></td>
+                        <td><code>10</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>BACKEND__AGENT_API_KEY</code></td>
+                        <td><span class="en">Agent authentication key</span><span class="tr">Ajan doğrulama anahtarı</span></td>
+                        <td><code>poyraz-runtime-security-2026-agent-key</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>BACKEND__RULES_PATH</code></td>
+                        <td><span class="en">Security rules endpoint</span><span class="tr">Güvenlik kuralları uç noktası</span></td>
+                        <td><code>/api/securityrules/rules</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>BACKEND__CONFIG_PATH</code></td>
+                        <td><span class="en">Monitoring config endpoint</span><span class="tr">İzleme yapılandırma uç noktası</span></td>
+                        <td><code>/api/securityrules/monitoring-config</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>BACKEND__ALERTS_PATH</code></td>
+                        <td><span class="en">Alert submission endpoint</span><span class="tr">Uyarı gönderme uç noktası</span></td>
+                        <td><code>/api/securityrules/alerts</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">System Call Monitoring</h3>
+        <h3 class="tr">Sistem Çağrısı İzleme</h3>
+
+        <p class="en">Control which system calls to monitor. Enabling specific syscalls allows fine-grained security monitoring but may increase overhead:</p>
+        <p class="tr">Hangi sistem çağrılarının izleneceğini kontrol edin. Belirli syscall'ları etkinleştirmek ince ayrıntılı güvenlik izlemeye izin verir ancak yükü artırabilir:</p>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">System Call</th><th class="tr">Sistem Çağrısı</th>
+                        <th class="en">Env Variable</th><th class="tr">Ortam Değişkeni</th>
+                        <th class="en">Purpose</th><th class="tr">Amaç</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>execve</code></td><td><code>ENABLE_EXECVE</code></td><td><span class="en">Process execution</span><span class="tr">Süreç yürütme</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>clone</code></td><td><code>ENABLE_CLONE</code></td><td><span class="en">Process creation</span><span class="tr">Süreç oluşturma</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>fork</code></td><td><code>ENABLE_FORK</code></td><td><span class="en">Process forking</span><span class="tr">Süreç dallanma</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>connect</code></td><td><code>ENABLE_CONNECT</code></td><td><span class="en">Network connections</span><span class="tr">Ağ bağlantıları</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>bind</code></td><td><code>ENABLE_BIND</code></td><td><span class="en">Port binding</span><span class="tr">Port bağlama</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>open/openat</code></td><td><code>ENABLE_OPEN/ENABLE_OPENAT</code></td><td><span class="en">File access</span><span class="tr">Dosya erişimi</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>write</code></td><td><code>ENABLE_WRITE</code></td><td><span class="en">File write</span><span class="tr">Dosya yazma</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>unlink/unlinkat</code></td><td><code>ENABLE_UNLINK/ENABLE_UNLINKAT</code></td><td><span class="en">File deletion</span><span class="tr">Dosya silme</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>link</code></td><td><code>ENABLE_LINK</code></td><td><span class="en">Hard link creation</span><span class="tr">Hard link oluşturma</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>rename</code></td><td><code>ENABLE_RENAME</code></td><td><span class="en">File renaming</span><span class="tr">Dosya yeniden adlandırma</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>mkdir/rmdir</code></td><td><code>ENABLE_MKDIR/ENABLE_RMDIR</code></td><td><span class="en">Directory ops</span><span class="tr">Dizin işlemleri</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>xattr</code></td><td><code>ENABLE_XATTR</code></td><td><span class="en">Extended attributes</span><span class="tr">Genişletilmiş öznitelikler</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>ptrace</code></td><td><code>ENABLE_PTRACE</code></td><td><span class="en">Process debugging</span><span class="tr">Süreç hata ayıklama</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>mount</code></td><td><code>ENABLE_MOUNT</code></td><td><span class="en">Filesystem mounting</span><span class="tr">Dosya sistemi bağlama</span></td><td><code>false</code></td></tr>
+                    <tr><td><code>accept</code></td><td><code>ENABLE_ACCEPT</code></td><td><span class="en">Inbound connections</span><span class="tr">Gelen bağlantılar</span></td><td><code>false</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">eBPF Configuration</h3>
+        <h3 class="tr">eBPF Yapılandırması</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>EBPF__BUFFER_PAGES</code></td>
+                        <td><span class="en">eBPF ring buffer size in pages</span><span class="tr">Sayfa cinsinden eBPF halka tamponu boyutu</span></td>
+                        <td><code>512</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>EBPF__POLL_TIMEOUT</code></td>
+                        <td><span class="en">Event polling timeout in milliseconds</span><span class="tr">Milisaniye cinsinden olay polling zaman aşımı</span></td>
+                        <td><code>50</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Alert Configuration</h3>
+        <h3 class="tr">Uyarı Yapılandırması</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ALERTS__DEDUPLICATION_WINDOW</code></td>
+                        <td><span class="en">Alert deduplication window (seconds)</span><span class="tr">Uyarı yinelenme önleme penceresi (saniye)</span></td>
+                        <td><code>300</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ALERTS__RATE_LIMIT_PER_POD</code></td>
+                        <td><span class="en">Maximum alerts per pod per minute</span><span class="tr">Pod başına dakika başına maksimum uyarı</span></td>
+                        <td><code>10</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ALERTS__RATE_LIMIT_PER_NAMESPACE</code></td>
+                        <td><span class="en">Maximum alerts per namespace per minute</span><span class="tr">Namespace başına dakika başına maksimum uyarı</span></td>
+                        <td><code>100</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ALERTS__WEBHOOK_ENABLED</code></td>
+                        <td><span class="en">Enable webhook notifications</span><span class="tr">Webhook bildirimlerini etkinleştir</span></td>
+                        <td><code>false</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ALERTS__WEBHOOK_URL</code></td>
+                        <td><span class="en">Webhook endpoint URL</span><span class="tr">Webhook uç nokta URL'si</span></td>
+                        <td><code>""</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Rule Management</h3>
+        <h3 class="tr">Kural Yönetimi</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>RULES__RULES_DIRECTORY</code></td>
+                        <td><span class="en">Local rules storage directory</span><span class="tr">Yerel kural depolama dizini</span></td>
+                        <td><code>/tmp/rules</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>RULES__RELOAD_INTERVAL</code></td>
+                        <td><span class="en">Rule reload interval (seconds)</span><span class="tr">Kural yeniden yükleme aralığı (saniye)</span></td>
+                        <td><code>60</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>RULES__ENABLE_HOT_RELOAD</code></td>
+                        <td><span class="en">Enable automatic rule reloading</span><span class="tr">Otomatik kural yeniden yüklemeyi etkinleştir</span></td>
+                        <td><code>true</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Security Configuration</h3>
+        <h3 class="tr">Güvenlik Yapılandırması</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>SECURITY__EXCLUDED_NAMESPACES</code></td>
+                        <td><span class="en">Namespaces to exclude from monitoring</span><span class="tr">İzlemeden hariç tutulacak namespace'ler</span></td>
+                        <td><code>poyraz-runtime-security,kube-public,kube-node-lease</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Observability Configuration</h3>
+        <h3 class="tr">Gözlemlenebilirlik Yapılandırması</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>OBSERVABILITY__LOG_LEVEL</code></td><td><span class="en">Log verbosity (DEBUG, INFO, WARN)</span><span class="tr">Log ayrıntısı (DEBUG, INFO, WARN)</span></td><td><code>INFO</code></td></tr>
+                    <tr><td><code>OBSERVABILITY__LOG_FORMAT</code></td><td><span class="en">Log output format (json, text)</span><span class="tr">Log çıktı formatı (json, text)</span></td><td><code>json</code></td></tr>
+                    <tr><td><code>OBSERVABILITY__METRICS_ENABLED</code></td><td><span class="en">Enable Prometheus metrics export</span><span class="tr">Prometheus metrik dışa aktarmayı aç</span></td><td><code>true</code></td></tr>
+                    <tr><td><code>OBSERVABILITY__METRICS_PORT</code></td><td><span class="en">Port for metrics scraping</span><span class="tr">Metrik kazıma portu</span></td><td><code>8080</code></td></tr>
+                    <tr><td><code>OBSERVABILITY__HEALTH_CHECK_ENABLED</code></td><td><span class="en">Enable /healthz endpoint</span><span class="tr">/healthz uç noktasını aç</span></td><td><code>true</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Kubernetes Integration</h3>
+        <h3 class="tr">Kubernetes Entegrasyonu</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>KUBERNETES__IN_CLUSTER</code></td>
+                        <td><span class="en">Use in-cluster Kubernetes configuration</span><span class="tr">Küme içi Kubernetes yapılandırmasını kullan</span></td>
+                        <td><code>true</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>KUBERNETES__POD_CACHE_REFRESH_INTERVAL</code></td>
+                        <td><span class="en">Pod metadata cache refresh interval (seconds)</span><span class="tr">Pod metadata önbellek yenileme aralığı (saniye)</span></td>
+                        <td><code>600</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Complete Configuration Example</h3>
+        <h3 class="tr">Tam Yapılandırma Örneği</h3>
+
+        <div class="info-card">
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>  # Application
+  APP_NAME: "runtime-security"
+  VERSION: "2.0.0"
+  ENVIRONMENT: "production"
+  
+  # Backend API
+  BACKEND__BASE_URL: "http://10.200.63.202:8686"
+  BACKEND__TIMEOUT: "10"
+  BACKEND__AGENT_API_KEY: "poyraz-runtime-security-2026-agent-key"
+  BACKEND__RULES_PATH: "/api/securityrules/rules"
+  BACKEND__CONFIG_PATH: "/api/securityrules/monitoring-config"
+  BACKEND__ALERTS_PATH: "/api/securityrules/alerts"
+
+  # Event Monitoring Configuration
+  ENABLE_EXECVE: "true"
+  ENABLE_CLONE: "false"
+  ENABLE_FORK: "false"
+  ENABLE_CONNECT: "true"
+  ENABLE_BIND: "false"
+  ENABLE_OPEN: "true"
+  ENABLE_OPENAT: "true"
+  ENABLE_WRITE: "false"
+  ENABLE_UNLINK: "false"
+  ENABLE_UNLINKAT: "false"
+  ENABLE_LINK: "false"
+  ENABLE_RENAME: "false"
+  ENABLE_MKDIR: "false"
+  ENABLE_RMDIR: "false"
+  ENABLE_XATTR: "false"
+  ENABLE_PTRACE: "true"
+  ENABLE_MOUNT: "false"
+  ENABLE_ACCEPT: "false"
+  
+  # eBPF Configuration
+  EBPF__BUFFER_PAGES: "512"
+  EBPF__POLL_TIMEOUT: "50"
+  
+  # Alert configuration
+  ALERTS__DEDUPLICATION_WINDOW: "300"
+  ALERTS__RATE_LIMIT_PER_POD: "10"
+  ALERTS__RATE_LIMIT_PER_NAMESPACE: "100"
+  ALERTS__WEBHOOK_ENABLED: "false"
+  
+  # Security configuration
+  SECURITY__EXCLUDED_NAMESPACES: "poyraz-runtime-security,kube-public,kube-node-lease"
+  
+  # Observability configuration
+  OBSERVABILITY__LOG_LEVEL: "INFO"
+  OBSERVABILITY__METRICS_ENABLED: "true"
+  
+  # Kubernetes configuration
+  KUBERNETES__IN_CLUSTER: "true"
+  KUBERNETES__POD_CACHE_REFRESH_INTERVAL: "600"</code></pre>
+            </div>
+        </div>
+
+        <h3 class="en">Performance Tuning Recommendations</h3>
+        <h3 class="tr">Performans Ayarlama Önerileri</h3>
+
+        <div class="grid-2">
+            <div class="info-card" style="border-top: 4px solid var(--warning);">
+                <h4 class="en">🔧 High-Volume Environments</h4>
+                <h4 class="tr">🔧 Yüksek Hacimli Ortamlar</h4>
+                <p class="en">For clusters with high activity:</p>
+                <p class="tr">Yüksek aktiviteye sahip kümeler için:</p>
+                <ul>
+                    <li class="en">Increase <code>EBPF__BUFFER_PAGES</code> to 1024</li>
+                    <li class="tr"><code>EBPF__BUFFER_PAGES</code>'i 1024'e yükseltin</li>
+                    <li class="en">Reduce <code>EBPF__POLL_TIMEOUT</code> to 25ms</li>
+                    <li class="tr"><code>EBPF__POLL_TIMEOUT</code>'u 25ms'ye düşürün</li>
+                    <li class="en">Enable only critical syscalls</li>
+                    <li class="tr">Yalnızca kritik syscall'ları etkinleştirin</li>
+                    <li class="en">Increase alert rate limits</li>
+                    <li class="tr">Uyarı hız limitlerini artırın</li>
+                </ul>
+            </div>
+            <div class="info-card" style="border-top: 4px solid var(--secondary);">
+                <h4 class="en">🎯 Security-Focused Setup</h4>
+                <h4 class="tr">🎯 Güvenlik Odaklı Kurulum</h4>
+                <p class="en">For maximum security monitoring:</p>
+                <p class="tr">Maksimum güvenlik izleme için:</p>
+                <ul>
+                    <li class="en">Enable <code>ENABLE_EXECVE</code>, <code>ENABLE_CONNECT</code></li>
+                    <li class="tr"><code>ENABLE_EXECVE</code>, <code>ENABLE_CONNECT</code>'i etkinleştirin</li>
+                    <li class="en">Enable <code>ENABLE_OPEN</code>, <code>ENABLE_OPENAT</code></li>
+                    <li class="tr"><code>ENABLE_OPEN</code>, <code>ENABLE_OPENAT</code>'ı etkinleştirin</li>
+                    <li class="en">Set <code>LOG_LEVEL</code> to DEBUG</li>
+                    <li class="tr"><code>LOG_LEVEL</code>'i DEBUG'a ayarlayın</li>
+                    <li class="en">Enable webhook notifications</li>
+                    <li class="tr">Webhook bildirimlerini etkinleştirin</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-card" style="border-top: 4px solid var(--accent);">
+            <h4 class="en">🚀 Applying Configuration Changes</h4>
+            <h4 class="tr">🚀 Yapılandırma Değişikliklerini Uygulama</h4>
+            <p class="en">After updating the ConfigMap, restart the agent pods to apply changes:</p>
+            <p class="tr">ConfigMap'i güncelledikten sonra, değişiklikleri uygulamak için ajan pod'larını yeniden başlatın:</p>
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>kubectl rollout restart daemonset/runtime-security -n poyraz-runtime-security</code></pre>
+            </div>
+            <p class="en" style="margin-top: 1rem; font-size: 0.9rem;">Monitor the rollout with:</p>
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>kubectl rollout status daemonset/runtime-security -n poyraz-runtime-security</code></pre>
+            </div>
+        </div>
+
+        <script>
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            btnEn.onclick = () => setLang('en');
+            btnTr.onclick = () => setLang('tr');
+
+            // Copy to clipboard functionality
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.onclick = () => {
+                    const container = button.parentElement;
+                    const code = container.querySelector('code') || container.querySelector('pre');
+                    const text = code.innerText;
+
+                    navigator.clipboard.writeText(text).then(() => {
+                        button.innerText = 'Copied!';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.innerText = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    });
+                };
+            });
+        </script>
+    </main>
+</body>
+</html>

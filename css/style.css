@@ -99,6 +99,60 @@ p { color: var(--text-dim); font-size: 1.15rem; max-width: 900px; margin-bottom:
 .info-card:hover { border-color: var(--primary); background: rgba(255,255,255,0.05); }
 .info-card h4 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--primary); font-family: 'Outfit', sans-serif; }
 
+/* Tabs */
+.tabs-container {
+    margin: 3rem 0;
+}
+
+.tabs-nav {
+    display: flex;
+    gap: 4px;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 16px;
+    padding: 6px;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.tab-btn:hover {
+    color: var(--primary);
+    background: rgba(6, 182, 212, 0.08);
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* Parameters Table */
 .data-panel { border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin: 3rem 0; background: var(--glass); }
 table { width: 100%; border-collapse: collapse; text-align: left; }
@@ -143,3 +197,14 @@ body[data-lang="tr"] span.tr, body[data-lang="tr"] strong.tr, body[data-lang="tr
 #page-content.fade-out {
     opacity: 0;
 }
+/* Copy Button */
+.code-container { position: relative; }
+.copy-btn {
+    position: absolute; right: 12px; top: 12px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text-dim); padding: 5px 10px;
+    font-size: 0.75rem; cursor: pointer; transition: 0.2s;
+    font-family: 'Inter', sans-serif; font-weight: 600;
+}
+.copy-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+.copy-btn.copied { background: var(--secondary); color: white; border-color: var(--secondary); }

@@ -36,8 +36,11 @@
             <a href="environments.html" class="nav-link">
                 <span class="en">Environments</span><span class="tr">Ortamlar</span>
             </a>
+            <a href="quick-install.html" class="nav-link">
+                <span class="en">Quick Install</span><span class="tr">Hızlı Kurulum</span>
+            </a>
             <a href="install.html" class="nav-link active">
-                <span class="en">Installations</span><span class="tr">Kurulumlar</span>
+                <span class="en">Detailed Install</span><span class="tr">Detaylı Kurulum</span>
             </a>
             <a href="backup.html" class="nav-link">
                 <span class="en">Backup</span><span class="tr">Yedekleme</span>
@@ -47,6 +50,17 @@
             </a>
             <a href="rbac.html" class="nav-link">
                 <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Agent Configuration</div>
+            <div class="nav-label tr">Ajan Yapılandırması</div>
+            <a href="network-config.html" class="nav-link">
+                <span class="en">Network Agent Config</span><span class="tr">Ağ Ajanı Yapılandırması</span>
+            </a>
+            <a href="runtime-config.html" class="nav-link">
+                <span class="en">Runtime Agent Config</span><span class="tr">Runtime Ajanı Yapılandırması</span>
             </a>
         </div>
 
@@ -106,64 +120,642 @@
         <h1 class="en">Platform <span>Installation</span></h1>
         <h1 class="tr">Platform <span>Kurulumu</span></h1>
 
-        <p class="en" style="font-size:1.2rem;">Poyraz-K8s is not a monolithic script; it is a distributed intelligent layer across your Kubernetes clusters. The installation process is divided into two distinct scopes: The <strong>Central Intelligence Hub (Backend)</strong> and the <strong>Edge Agents (eBPF & Security)</strong> deployed on each managed cluster.</p>
-        <p class="tr" style="font-size:1.2rem;">Poyraz-K8s monolitik bir betik değildir; Kubernetes kümeleriniz (cluster) boyunca dağıtılmış akıllı bir katmandır. Kurulum süreci iki belirgin kapsama (scope) ayrılmıştır: <strong>Merkezi İstihbarat Merkezi (Backend)</strong> ve yönetilen her kümeye dağıtılan <strong>Uç Ajanları (eBPF ve Güvenlik)</strong>.</p>
+        <p class="en" style="font-size:1.2rem;">Poyraz-K8s is a comprehensive Kubernetes security and observability platform with three main deployment categories. Each serves a distinct purpose in your cloud-native security strategy.</p>
+        <p class="tr" style="font-size:1.2rem;">Poyraz-K8s, bulut-native güvenlik stratejinizde farklı amaçlara hizmet eden üç ana dağıtım kategorisi bulunan kapsamlı bir Kubernetes güvenlik ve gözlemlenebilirlik platformudur.</p>
 
-        <div class="grid-2">
-            <div class="info-card" style="border-top: 4px solid var(--primary);">
-                <h4 class="en">1. Central Hub (Backend orchestrator)</h4>
-                <h4 class="tr">1. Merkezi Sistem (Backend orkestratörü)</h4>
-                <p class="en">The core backend provides the API, Casbin Authorization, PostgreSQL persistence, and Helm Bridge. It is installed centrally only once.</p>
-                <p class="tr">Temel backend sistemi; API, Casbin Yetkilendirme, PostgreSQL veritabanı kalıcılığı ve Helm Köprüsünü sağlar. Sadece bir kez merkezi olarak kurulur.</p>
-                <code style="display:block; margin-top:1rem; padding:1rem; background:#000;">helm install poyraz-backend ./charts</code>
+        <div class="tabs-container">
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="management">
+                    <span class="en">Management</span>
+                    <span class="tr">Yönetim</span>
+                </button>
+                <button class="tab-btn" data-tab="observability">
+                    <span class="en">Network Observability</span>
+                    <span class="tr">Ağ Gözlemlenebilirliği</span>
+                </button>
+                <button class="tab-btn" data-tab="security">
+                    <span class="en">Runtime Security</span>
+                    <span class="tr">Çalışma Zamanı Güvenliği</span>
+                </button>
             </div>
-            <div class="info-card" style="border-top: 4px solid var(--danger);">
-                <h4 class="en">2. Edge Agents (DaemonSets)</h4>
-                <h4 class="tr">2. Uç Ajanları (DaemonSet'ler)</h4>
-                <p class="en">eBPF network scanners and Runtime Security agents are deployed to every cluster you wish to manage, running as priviledged DaemonSets on every node.</p>
-                <p class="tr">eBPF ağ tarayıcıları ve Runtime (Çalışma Zamanı) Güvenlik ajanları, yönetmek istediğiniz her kümeye dağıtılır ve her node (düğüm) üzerinde ayrıcalıklı DaemonSet'ler olarak çalışır.</p>
-                <code style="display:block; margin-top:1rem; padding:1rem; background:#000;">kubectl apply -f poyraz-agents.yaml</code>
+
+            <!-- Management Tab -->
+            <div class="tab-content active" id="management">
+                <h3 class="en">Management Platform Installation</h3>
+                <h3 class="tr">Yönetim Platformu Kurulumu</h3>
+
+                <p class="en">The central management platform provides cluster orchestration, policy management, vulnerability scanning, and a unified dashboard. This is the core component that should be installed first.</p>
+                <p class="tr">Merkezi yönetim platformu, küme orkestrayonu, politika yönetimi, zafiyet taraması ve birleşik bir kontrol paneli sağlar. İlk kurulması gereken temel bileşendir.</p>
+
+                <h4 class="en" style="color: var(--primary); margin: 2rem 0 1rem;">Docker Compose Deployment</h4>
+                <h4 class="tr" style="color: var(--primary); margin: 2rem 0 1rem;">Docker Compose Dağıtımı</h4>
+
+                <div class="info-card">
+                    <pre><code>version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=k8s_platform
+      - POSTGRES_USER=k8s_user
+      - POSTGRES_PASSWORD=admin123postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # Platform Backend
+  platform-backend:
+    image: poyraz-k8s-backend:latest
+    container_name: backend
+    ports:
+      - "8686:8686"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - POSTGRES_USER=k8s_user
+      - POSTGRES_PASSWORD=admin123postgres
+      - POSTGRES_DB=k8s_platform
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  # Platform Frontend
+  platform-frontend:
+    image: poyraz-k8s-frontend:latest
+    container_name: frontend
+    ports:
+      - "8787:8787"
+    depends_on:
+      - platform-backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge</code></pre>
+                </div>
+
+                <h4 class="en" style="color: var(--secondary); margin: 2rem 0 1rem;">Environment Configuration</h4>
+                <h4 class="tr" style="color: var(--secondary); margin: 2rem 0 1rem;">Ortam Yapılandırması</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Variable</th><th class="tr">Değişken</th>
+                                <th class="en">Description</th><th class="tr">Açıklama</th>
+                                <th class="en">Default</th><th class="tr">Varsayılan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>POSTGRES_DB</code></td>
+                                <td><span class="en">PostgreSQL database name</span><span class="tr">PostgreSQL veritabanı adı</span></td>
+                                <td><code>k8s_platform</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>POSTGRES_USER</code></td>
+                                <td><span class="en">PostgreSQL username</span><span class="tr">PostgreSQL kullanıcı adı</span></td>
+                                <td><code>k8s_user</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>POSTGRES_PASSWORD</code></td>
+                                <td><span class="en">PostgreSQL password</span><span class="tr">PostgreSQL şifresi</span></td>
+                                <td><code>admin123postgres</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>SERVER_PORT</code></td>
+                                <td><span class="en">Backend server port</span><span class="tr">Backend sunucu portu</span></td>
+                                <td><code>8686</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>SUPERADMIN_PASSWORD</code></td>
+                                <td><span class="en">Initial admin dashboard password</span><span class="tr">Başlangıç admin paneli şifresi</span></td>
+                                <td><code>admin123</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="en" style="color: var(--warning); margin: 2rem 0 1rem;">Vulnerability Scanner Settings</h4>
+                <h4 class="tr" style="color: var(--warning); margin: 2rem 0 1rem;">Zafiyet Tarayıcısı Ayarları</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Variable</th><th class="tr">Değişken</th>
+                                <th class="en">Description</th><th class="tr">Açıklama</th>
+                                <th class="en">Default</th><th class="tr">Varsayılan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>VULN_SCAN_PATH</code></td>
+                                <td><span class="en">Trivy scanner binary path</span><span class="tr">Trivy tarayıcı binary yolu</span></td>
+                                <td><code>trivy</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>VULN_SCAN_CACHE</code></td>
+                                <td><span class="en">Trivy cache directory</span><span class="tr">Trivy önbellek klasörü</span></td>
+                                <td><code>/app/trivy-cache</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>VULN_SCAN_CRON</code></td>
+                                <td><span class="en">Scan schedule (cron format)</span><span class="tr">Tarama zamanlaması (cron formatı)</span></td>
+                                <td><code>0 * * * * *</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>VULN_SCAN_OFFLINE</code></td>
+                                <td><span class="en">Enable offline scanning</span><span class="tr">Çevrimdışı taramayı etkinleştir</span></td>
+                                <td><code>true</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>VULN_SCAN_DB_REPO</code></td>
+                                <td><span class="en">Vulnerability database repository</span><span class="tr">Zafiyet veritabanı deposu</span></td>
+                                <td><code>ghcr.io/aquasecurity/trivy-db</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="en" style="color: var(--accent); margin: 2rem 0 1rem;">Cluster Monitoring Settings</h4>
+                <h4 class="tr" style="color: var(--accent); margin: 2rem 0 1rem;">Küme İzleme Ayarları</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Variable</th><th class="tr">Değişken</th>
+                                <th class="en">Description</th><th class="tr">Açıklama</th>
+                                <th class="en">Default</th><th class="tr">Varsayılan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>CLUSTER_EYE_SCAN_INTERVAL_MS</code></td>
+                                <td><span class="en">Cluster health scan interval</span><span class="tr">Küme sağlık tarama aralığı</span></td>
+                                <td><code>300000</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>POD_METRICS_COLLECT_INTERVAL_MS</code></td>
+                                <td><span class="en">Pod metrics collection interval</span><span class="tr">Pod metrik toplama aralığı</span></td>
+                                <td><code>30000</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>POD_METRICS_RETENTION_DAYS</code></td>
+                                <td><span class="en">Pod metrics retention period</span><span class="tr">Pod metrik saklama süresi</span></td>
+                                <td><code>7</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>BACKUP_BASE_PATH</code></td>
+                                <td><span class="en">Backup storage directory</span><span class="tr">Yedek depolama klasörü</span></td>
+                                <td><code>/app/data/k8s-backup</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-card" style="border-top: 4px solid var(--primary);">
+                    <h4 class="en">Quick Start Command</h4>
+                    <h4 class="tr">Hızlı Başlangıç Komutu</h4>
+                    <p class="en">Deploy the management platform with default settings:</p>
+                    <p class="tr">Varsayılan ayarlarla yönetim platformunu dağıtın:</p>
+                    <code style="display:block; margin-top:1rem; padding:1rem; background:#000;">cd deploy/compose && docker-compose up -d</code>
+                    <p class="en" style="margin-top:1rem; font-size:0.9rem;">Access the platform at <strong>http://localhost:8787</strong> (Frontend) and <strong>http://localhost:8686</strong> (Backend API)</p>
+                    <p class="tr" style="margin-top:1rem; font-size:0.9rem;">Platforma <strong>http://localhost:8787</strong> (Frontend) ve <strong>http://localhost:8686</strong> (Backend API) üzerinden erişin</p>
+                </div>
+            </div>
+
+            <!-- Network Observability Tab -->
+            <div class="tab-content" id="observability">
+                <h3 class="en">Network Observability Agent</h3>
+                <h3 class="tr">Ağ Gözlemlenebilirlik Ajanı</h3>
+
+                <p class="en">Deploy eBPF-powered network flow monitoring agents to capture real-time TCP/UDP traffic patterns without performance overhead. These agents hook directly into kernel networking functions.</p>
+                <p class="tr">Performans yükü olmadan gerçek zamanlı TCP/UDP trafik desenlerini yakalamak için eBPF destekli ağ akış izleme ajanları dağıtın. Bu ajanlar doğrudan çekirdek ağ işlevlerine bağlanır.</p>
+
+                <h4 class="en" style="color: var(--primary); margin: 2rem 0 1rem;">Agent Deployment</h4>
+                <h4 class="tr" style="color: var(--primary); margin: 2rem 0 1rem;">Ajan Dağıtımı</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Component</th><th class="tr">Bileşen</th>
+                                <th class="en">Binary</th><th class="tr">Binary</th>
+                                <th class="en">Kernel Requirement</th><th class="tr">Çekirdek Gereksinimi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong style="color:var(--primary)">HTTP Flow Tracer</strong></td>
+                                <td><code>http_tracer_5.4</code> / <code>http_tracer_5.8</code></td>
+                                <td><span class="en">Linux 4.15+ (eBPF enabled)</span><span class="tr">Linux 4.15+ (eBPF aktif)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="en" style="color: var(--secondary); margin: 2rem 0 1rem;">Environment Configuration</h4>
+                <h4 class="tr" style="color: var(--secondary); margin: 2rem 0 1rem;">Ortam Yapılandırması</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Variable</th><th class="tr">Değişken</th>
+                                <th class="en">Description</th><th class="tr">Açıklama</th>
+                                <th class="en">Default</th><th class="tr">Varsayılan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>NETWORK_FLOW_RETENTION</code></td>
+                                <td><span class="en">Flow data retention in days</span><span class="tr">Akış verisi saklama süresi (gün)</span></td>
+                                <td><code>15</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>NETWORK_FLOW_PURGE_CRON</code></td>
+                                <td><span class="en">Data cleanup schedule</span><span class="tr">Veri temizleme zamanlaması</span></td>
+                                <td><code>0 */15 * * * *</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>NETWORK_FLOW_PURGE_BATCH_SIZE</code></td>
+                                <td><span class="en">Cleanup batch size</span><span class="tr">Temizleme parti boyutu</span></td>
+                                <td><code>5000</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>POLICY_LABELS</code></td>
+                                <td><span class="en">Labels for network policy detection</span><span class="tr">Ağ politikası tespiti için etiketler</span></td>
+                                <td><code>app,uygulama,deploy,project</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="en" style="color: var(--warning); margin: 2rem 0 1rem;">DaemonSet Configuration</h4>
+                <h4 class="tr" style="color: var(--warning); margin: 2rem 0 1rem;">DaemonSet Yapılandırması</h4>
+
+                <div class="info-card">
+                    <pre><code>apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: http-tracer
+  namespace: poyraz-system
+spec:
+  selector:
+    matchLabels:
+      app: http-tracer
+  template:
+    metadata:
+      labels:
+        app: http-tracer
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - name: http-tracer
+        image: poyraz-k8s/http-tracer:latest
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: sys
+          mountPath: /host/sys
+          readOnly: true
+        env:
+        - name: BACKEND_URL
+          value: "http://poyraz-backend:8686"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys</code></pre>
+                </div>
+
+                <div class="info-card" style="border-top: 4px solid var(--primary);">
+                    <h4 class="en">Deployment Command</h4>
+                    <h4 class="tr">Dağıtım Komutu</h4>
+                    <p class="en">Deploy network observability agents on every node:</p>
+                    <p class="tr">Her düğüme ağ gözlemlenebilirlik ajanları dağıtın:</p>
+                    <code style="display:block; margin-top:1rem; padding:1rem; background:#000;">kubectl apply -f k8s/http-tracer-daemonset.yaml</code>
+                    <p class="en" style="margin-top:1rem; font-size:0.9rem;"><strong>Note:</strong> Requires privileged access and eBPF-enabled kernel (Linux 4.15+)</p>
+                    <p class="tr" style="margin-top:1rem; font-size:0.9rem;"><strong>Not:</strong> Ayrıcalıklı erişim ve eBPF destekli çekirdek gerektirir (Linux 4.15+)</p>
+                </div>
+
+                <h4 class="en" style="color: var(--accent); margin: 2rem 0 1rem;">Flow Data Structure</h4>
+                <h4 class="tr" style="color: var(--accent); margin: 2rem 0 1rem;">Akış Veri Yapısı</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Field</th><th class="tr">Alan</th>
+                                <th class="en">Description</th><th class="tr">Açıklama</th>
+                                <th class="en">Type</th><th class="tr">Tip</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>source_ip</code></td>
+                                <td><span class="en">Source IP address</span><span class="tr">Kaynak IP adresi</span></td>
+                                <td><code>string</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>dest_ip</code></td>
+                                <td><span class="en">Destination IP address</span><span class="tr">Hedef IP adresi</span></td>
+                                <td><code>string</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>source_port</code></td>
+                                <td><span class="en">Source port</span><span class="tr">Kaynak portu</span></td>
+                                <td><code>int</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>dest_port</code></td>
+                                <td><span class="en">Destination port</span><span class="tr">Hedef portu</span></td>
+                                <td><code>int</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>protocol</code></td>
+                                <td><span class="en">Network protocol</span><span class="tr">Ağ protokolü</span></td>
+                                <td><code>string</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>bytes_sent</code></td>
+                                <td><span class="en">Bytes transmitted</span><span class="tr">Aktarılan baytlar</span></td>
+                                <td><code>long</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>pod_name</code></td>
+                                <td><span class="en">Source pod name</span><span class="tr">Kaynak pod adı</span></td>
+                                <td><code>string</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>namespace</code></td>
+                                <td><span class="en">Pod namespace</span><span class="tr">Pod namespace</span></td>
+                                <td><code>string</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Runtime Security Tab -->
+            <div class="tab-content" id="security">
+                <h3 class="en">Runtime Security Agent</h3>
+                <h3 class="tr">Çalışma Zamanı Güvenlik Ajanı</h3>
+
+                <p class="en">Deploy advanced eBPF-based runtime security monitoring that tracks system calls, file operations, and process executions in real-time to detect and prevent malicious activities.</p>
+                <p class="tr">Kötü niyetli faaliyetleri tespit etmek ve önlemek için sistem çağrılarını, dosya işlemlerini ve süreç yürütmelerini gerçek zamanlı olarak izleyen gelişmiş eBPF tabanlı çalışma zamanı güvenlik izlemesi dağıtın.</p>
+
+                <h4 class="en" style="color: var(--primary); margin: 2rem 0 1rem;">Agent Architecture</h4>
+                <h4 class="tr" style="color: var(--primary); margin: 2rem 0 1rem;">Ajan Mimarisi</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Component</th><th class="tr">Bileşen</th>
+                                <th class="en">Function</th><th class="tr">İşlev</th>
+                                <th class="en">Kernel Requirement</th><th class="tr">Çekirdek Gereksinimi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong style="color:var(--danger)">runtime-guard</strong></td>
+                                <td><span class="en">System call monitoring & exec blocking</span><span class="tr">Sistem çağrısı izleme & exec engelleme</span></td>
+                                <td><span class="en">Linux 5.8+ (BPF RingBuf)</span><span class="tr">Linux 5.8+ (BPF RingBuf)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="en" style="color: var(--secondary); margin: 2rem 0 1rem;">Environment Configuration</h4>
+                <h4 class="tr" style="color: var(--secondary); margin: 2rem 0 1rem;">Ortam Yapılandırması</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Variable</th><th class="tr">Değişken</th>
+                                <th class="en">Description</th><th class="tr">Açıklama</th>
+                                <th class="en">Default</th><th class="tr">Varsayılan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>EBPF__MAX_ARGS</code></td>
+                                <td><span class="en">Maximum command arguments to capture</span><span class="tr">Yakalanacak maksimum komut argümanı</span></td>
+                                <td><code>10</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>EBPF__ARG_SIZE</code></td>
+                                <td><span class="en">Maximum size per argument</span><span class="tr">Argüman başına maksimum boyut</span></td>
+                                <td><code>64</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>EBPF__BUFFER_PAGES</code></td>
+                                <td><span class="en">eBPF ring buffer pages</span><span class="tr">eBPF halka tamponu sayfaları</span></td>
+                                <td><code>64</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>SECURITY__EXCLUDED_NAMESPACES</code></td>
+                                <td><span class="en">Namespaces to exclude from monitoring</span><span class="tr">İzlemeden hariç tutulacak namespace'ler</span></td>
+                                <td><code>kube-system,kube-public</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>SECURITY__SANITIZE_INPUTS</code></td>
+                                <td><span class="en">Enable input sanitization</span><span class="tr">Girdi temizlemesini etkinleştir</span></td>
+                                <td><code>true</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>BACKEND__BASE_URL</code></td>
+                                <td><span class="en">Backend API endpoint for rules</span><span class="tr">Kurallar için backend API uç noktası</span></td>
+                                <td><code>http://poyraz-backend:8686</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="en" style="color: var(--warning); margin: 2rem 0 1rem;">Exec-Allow Security Rules</h4>
+                <h4 class="tr" style="color: var(--warning); margin: 2rem 0 1rem;">Exec-Allow Güvenlik Kuralları</h4>
+
+                <p class="en">The runtime security agent enforces role-based command execution policies. Users can only execute commands that match their assigned RegEx whitelist patterns.</p>
+                <p class="tr">Çalışma zamanı güvenlik ajanı, rol tabanlı komut yürütme politikalarını uygular. Kullanıcılar yalnızca atanan RegEx beyaz liste desenlerine uyan komutları yürütebilir.</p>
+
+                <div class="media-container" style="border-color: var(--danger);">
+                    <img src="image/exec-allow.png" alt="Exec Allow Configuration">
+                </div>
+
+                <div class="media-container" style="border-color: var(--danger); margin-top: 2rem;">
+                    <img src="image/exec-allow-2.png" alt="Exec Allow Rules Management">
+                </div>
+
+                <h4 class="en" style="color: var(--accent); margin: 2rem 0 1rem;">Security Event Types</h4>
+                <h4 class="tr" style="color: var(--accent); margin: 2rem 0 1rem;">Güvenlik Olay Türleri</h4>
+
+                <div class="data-panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="en">Event Type</th><th class="tr">Olay Türü</th>
+                                <th class="en">System Call</th><th class="tr">Sistem Çağrısı</th>
+                                <th class="en">Description</th><th class="tr">Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong style="color:var(--danger)">EXEC_BLOCKED</strong></td>
+                                <td><code>execve</code></td>
+                                <td><span class="en">Command execution blocked by policy</span><span class="tr">Komut yürütme politika tarafından engellendi</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color:var(--warning)">EXEC_ALLOWED</strong></td>
+                                <td><code>execve</code></td>
+                                <td><span class="en">Command execution permitted</span><span class="tr">Komut yürütmesine izin verildi</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color:var(--primary)">FILE_ACCESS</strong></td>
+                                <td><code>openat</code></td>
+                                <td><span class="en">File system access attempt</span><span class="tr">Dosya sistemi erişim denemesi</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color:var(--accent)">PROCESS_SPAWN</strong></td>
+                                <td><code>clone</code></td>
+                                <td><span class="en">New process creation</span><span class="tr">Yeni süreç oluşturma</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color:var(--secondary)">PTRACE_ATTEMPT</strong></td>
+                                <td><code>ptrace</code></td>
+                                <td><span class="en">Process debugging attempt</span><span class="tr">Süreç hata ayıklama denemesi</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="en" style="color: var(--primary); margin: 2rem 0 1rem;">DaemonSet Deployment</h4>
+                <h4 class="tr" style="color: var(--primary); margin: 2rem 0 1rem;">DaemonSet Dağıtımı</h4>
+
+                <div class="info-card">
+                    <pre><code>apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: runtime-security
+  namespace: poyraz-system
+spec:
+  selector:
+    matchLabels:
+      app: runtime-security
+  template:
+    metadata:
+      labels:
+        app: runtime-security
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - name: runtime-security
+        image: poyraz-k8s/runtime-security:latest
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - SYS_ADMIN
+              - SYS_RESOURCE
+              - SYS_PTRACE
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: sys
+          mountPath: /host/sys
+          readOnly: true
+        - name: debugfs
+          mountPath: /sys/kernel/debug
+        env:
+        - name: BACKEND__BASE_URL
+          value: "http://poyraz-backend:8686"
+        - name: KUBERNETES__IN_CLUSTER
+          value: "true"
+        - name: CLUSTER_ID
+          value: "production-cluster"
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys
+      - name: debugfs
+        hostPath:
+          path: /sys/kernel/debug</code></pre>
+                </div>
+
+                <div class="info-card" style="border-top: 4px solid var(--danger);">
+                    <h4 class="en">Deployment Command</h4>
+                    <h4 class="tr">Dağıtım Komutu</h4>
+                    <p class="en">Deploy runtime security agents with advanced monitoring:</p>
+                    <p class="tr">Gelişmiş izleme ile çalışma zamanı güvenlik ajanları dağıtın:</p>
+                    <code style="display:block; margin-top:1rem; padding:1rem; background:#000;">kubectl apply -f k8s/runtime-security-daemonset.yaml</code>
+                    <p class="en" style="margin-top:1rem; font-size:0.9rem;"><strong>Warning:</strong> Requires privileged containers with SYS_ADMIN capabilities and debugfs access</p>
+                    <p class="tr" style="margin-top:1rem; font-size:0.9rem;"><strong>Uyarı:</strong> SYS_ADMIN yetenekleri ve debugfs erişimi olan ayrıcalıklı konteynerler gerektirir</p>
+                </div>
             </div>
         </div>
 
-        <h3 class="en">Agent Architectural Details</h3>
-        <h3 class="tr">Ajan Mimari Detayları</h3>
+        <script>
+            // Tab functionality
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabName = btn.getAttribute('data-tab');
 
-        <div class="data-panel">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="en">Agent Binary</th><th class="tr">Ajan Binary (Dosyası)</th>
-                        <th class="en">Deployment Target</th><th class="tr">Dağıtım Hedefi</th>
-                        <th class="en">Kernel Requirement</th><th class="tr">Çekirdek (Kernel) Gereksinimi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong style="color:var(--primary)">ebpf-flow-agent</strong></td>
-                        <td><span class="en">Every Node (DaemonSet)</span><span class="tr">Her Düğüm (DaemonSet)</span></td>
-                        <td><span class="en">min. Linux 4.15 (eBPF enabled)</span><span class="tr">min. Linux 4.15 (eBPF aktif)</span></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <p class="en" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Hooks into kernel socket functions (<code>tcp_sendmsg</code>, <code>tcp_cleanup_rbuf</code>) to build the real-time Network Map without sidecars or proxy lag.</em></p>
-                            <p class="tr" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Sidecar'lar veya proxy gecikmeleri olmadan gerçek zamanlı Ağ Haritasını oluşturmak için doğrudan çekirdek soket işlevlerine (<code>tcp_sendmsg</code>, vb.) entegre olur.</em></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong style="color:var(--danger)">runtime-guard</strong></td>
-                        <td><span class="en">Every Node (DaemonSet)</span><span class="tr">Her Düğüm (DaemonSet)</span></td>
-                        <td><span class="en">min. Linux 5.8 (BPF RingBuf)</span><span class="tr">min. Linux 5.8 (BPF RingBuf)</span></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <p class="en" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Monitors system calls (<code>execve</code>, <code>mkdir</code>, <code>ptrace</code>) to enforce zero-trust limits on pods and report exec session footprints.</em></p>
-                            <p class="tr" style="font-size:0.9rem; margin:0; padding:1rem 0;"><em>Pod'lar üzerinde sıfır güven sınırlarını zorlamak ve exec oturumu izlerini raporlamak için sistem çağrılarını gözetler.</em></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                    // Remove active class from all buttons and content
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                    // Add active class to clicked button and corresponding content
+                    btn.classList.add('active');
+                    document.getElementById(tabName).classList.add('active');
+                });
+            });
+
+            // Language toggle functionality (existing functionality preserved)
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            const enElements = document.querySelectorAll('.en');
+            const trElements = document.querySelectorAll('.tr');
+
+            btnEn.onclick = () => {
+                btnEn.classList.add('active');
+                btnTr.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'inline');
+                trElements.forEach(el => el.style.display = 'none');
+            };
+
+            btnTr.onclick = () => {
+                btnTr.classList.add('active');
+                btnEn.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'none');
+                trElements.forEach(el => el.style.display = 'inline');
+            };
+
+            // Initialize with English
+            btnEn.click();
+        </script>
     </main>
 </body>
 </html>

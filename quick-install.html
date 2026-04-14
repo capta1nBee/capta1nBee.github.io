@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Install - Poyraz K8s Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('poyraz-lang') || 'en';
+            setLang(savedLang);
+        });
+        function setLang(lang) {
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            const enElements = document.querySelectorAll('.en');
+            const trElements = document.querySelectorAll('.tr');
+            
+            if (lang === 'en') {
+                if(btnEn) btnEn.classList.add('active');
+                if(btnTr) btnTr.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'inline-block');
+                trElements.forEach(el => el.style.display = 'none');
+                document.body.setAttribute('data-lang', 'en');
+            } else {
+                if(btnTr) btnTr.classList.add('active');
+                if(btnEn) btnEn.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'none');
+                trElements.forEach(el => el.style.display = 'inline-block');
+                document.body.setAttribute('data-lang', 'tr');
+            }
+            localStorage.setItem('poyraz-lang', lang);
+        }
+    </script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside>
+        <a href="environments.html" class="brand">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="8" stroke="var(--primary)" stroke-width="2.5"/><path d="M16 10V22M10 16H22" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>POYRAZ K8S</span>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-label en">Core Setup</div>
+            <div class="nav-label tr">Temel Kurulum</div>
+            <a href="environments.html" class="nav-link">
+                <span class="en">Environments</span><span class="tr">Ortamlar</span>
+            </a>
+            <a href="quick-install.html" class="nav-link active">
+                <span class="en">Quick Install</span><span class="tr">Hızlı Kurulum</span>
+            </a>
+            <a href="install.html" class="nav-link">
+                <span class="en">Detailed Install</span><span class="tr">Detaylı Kurulum</span>
+            </a>
+            <a href="backup.html" class="nav-link">
+                <span class="en">Backup</span><span class="tr">Yedekleme</span>
+            </a>
+            <a href="federation.html" class="nav-link">
+                <span class="en">Federation</span><span class="tr">Federasyon</span>
+            </a>
+            <a href="rbac.html" class="nav-link">
+                <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Agent Configuration</div>
+            <div class="nav-label tr">Ajan Yapılandırması</div>
+            <a href="network-config.html" class="nav-link">
+                <span class="en">Network Agent Config</span><span class="tr">Ağ Ajanı Yapılandırması</span>
+            </a>
+            <a href="runtime-config.html" class="nav-link">
+                <span class="en">Runtime Agent Config</span><span class="tr">Runtime Ajanı Yapılandırması</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Workload Delivery</div>
+            <div class="nav-label tr">İş Yükü Dağıtımı</div>
+            <a href="appcreator.html" class="nav-link">
+                <span class="en">App Creator</span><span class="tr">App Oluşturucu</span>
+            </a>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Ecosystem</span><span class="tr">Helm Ekosistemi</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config & Secrets</span><span class="tr">Config & Secret</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Platform Management</div>
+            <div class="nav-label tr">Platform Yönetimi</div>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Manager</span><span class="tr">Helm Yöneticisi</span>
+            </a>
+            <a href="appcreator.html" class="nav-link">
+                <span class="en">App Creator</span><span class="tr">Uygulama Oluşturucu</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config Sync</span><span class="tr">Yapılandırma Eşitleme</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Security Intelligence</div>
+            <div class="nav-label tr">Güvenlik İstihbaratı</div>
+            <a href="vuln-scan.html" class="nav-link">
+                <span class="en">Vuln Scanner</span><span class="tr">Zafiyet Tarama</span>
+            </a>
+            <a href="cluster-eye.html" class="nav-link">
+                <span class="en">Cluster Eye</span><span class="tr">Cluster Eye</span>
+            </a>
+            <a href="exec.html" class="nav-link">
+                <span class="en">Terminal Exec</span><span class="tr">Terminal Komut</span>
+            </a>
+            <a href="exec-recorder.html" class="nav-link">
+                <span class="en">Exec Recorder</span><span class="tr">Komut Kaydedici</span>
+            </a>
+            <a href="network-flow.html" class="nav-link">
+                <span class="en">Network Flow</span><span class="tr">Ağ Akışı</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Analytics & Insights</div>
+            <div class="nav-label tr">Analitik ve İçgörüler</div>
+            <a href="report.html" class="nav-link">
+                <span class="en">Reports</span><span class="tr">Raporlar</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-wrapper">
+        <div class="sticky-header">
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
+            <div class="lang-control">
+                <button id="btn-en" class="lang-btn active">EN</button>
+                <button id="btn-tr" class="lang-btn">TR</button>
+            </div>
+        </div>
+
+        <h1 class="en">Quick <span>Installation</span></h1>
+        <h1 class="tr">Hızlı <span>Kurulum</span></h1>
+
+        <p class="en" style="font-size:1.2rem;">Get Poyraz-K8s platform up and running in under 5 minutes. This guide covers the essential steps for a basic deployment.</p>
+        <p class="tr" style="font-size:1.2rem;">Poyraz-K8s platformunu 5 dakikadan kısa sürede çalışır duruma getirin. Bu kılavuz, temel dağıtım için gerekli adımları kapsar.</p>
+
+        <div class="info-card" style="border-top: 4px solid var(--warning); margin: 2rem 0;">
+            <h4 class="en">Prerequisites</h4>
+            <h4 class="tr">Gereksinimler</h4>
+            <p class="en">• Docker & Docker Compose installed<br>• Kubernetes cluster with admin access<br>• kubectl configured<br>• Git installed</p>
+            <p class="tr">• Docker ve Docker Compose kurulu<br>• Admin erişimi olan Kubernetes kümesi<br>• kubectl yapılandırılmış<br>• Git kurulu</p>
+        </div>
+
+        <h3 class="en">Step 1: Clone Repository</h3>
+        <h3 class="tr">Adım 1: Depoyu Klonlayın</h3>
+
+        <div class="info-card">
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="en">git clone https://github.com/capta1nBee/poyrazk8s.git
+cd poyrazk8s/deploy/compose</code></pre>
+            </div>
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code class="tr">git clone https://github.com/capta1nBee/poyrazk8s.git
+cd poyrazk8s/deploy/compose</code></pre>
+            </div>
+        </div>
+
+        <h3 class="en">Step 2: Port & Configuration Settings</h3>
+        <h3 class="tr">Adım 2: Port ve Yapılandırma Ayarları</h3>
+        
+        <p class="en">You can modify proxy exposed ports and backend API paths.</p>
+        <p class="tr">Proxy aracılığıyla dışarıya açılan portları ve backend API yollarını değiştirebilirsiniz.</p>
+
+        <div class="info-card">
+            <h4 class="en">Port Change</h4>
+            <h4 class="tr">Port Değişikliği</h4>
+            <p class="en">If you modify the UI proxy port in `compose.yaml` (e.g., `- "30025:30025"`), you must also update the corresponding port path in <code>frontend/nginx.conf</code>.</p>
+            <p class="tr">`compose.yaml` içerisindeki UI proxy portunu (örn. `- "30025:30025"`) değiştirirseniz, <code>frontend/nginx.conf</code> içerisindeki ilgili port yolunu da güncellemeniz gerekir.</p>
+        </div>
+
+        <div class="info-card" style="border-top: 4px solid var(--primary); margin-top: 2rem;">
+            <h4 class="en">Network Policy Selectors Configuration</h4>
+            <h4 class="tr">Ağ Politikası Seçici (Selector) Yapılandırması</h4>
+            <p class="en">To accurately define default ingress and egress policy generation targets, customize your environment labels in `compose.yaml`:</p>
+            <p class="tr">Ağ trafik kuralları oluşturulurken hedef alınacak etiketleri (label) seçmek için `compose.yaml` dosyasını özelleştirin:</p>
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>POLICY_LABELS=app,uygulama,deploy,project</code></pre>
+            </div>
+        </div>
+
+        <h3 class="en" style="margin-top: 2rem;">Step 3: Start Services in Docker</h3>
+        <h3 class="tr" style="margin-top: 2rem;">Adım 3: Docker Servislerini Başlatın</h3>
+
+        <div class="info-card">
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>docker compose up -d</code></pre>
+            </div>
+        </div>
+
+        <h3 class="en">Step 4: Network Agent Setup</h3>
+        <h3 class="tr">Adım 4: Ağ Ajanı Kurulumu</h3>
+
+        <div class="alert en" style="border-left: 4px solid var(--warning); padding: 1rem; background: var(--card-bg); margin-bottom: 1.5rem;">
+            <strong>Note:</strong> Tested on Kernel 5.8 and above. Requires BTF support.
+        </div>
+        <div class="alert tr" style="border-left: 4px solid var(--warning); padding: 1rem; background: var(--card-bg); margin-bottom: 1.5rem;">
+            <strong>Not:</strong> Kernel 5.8 ve üzeri ile test edilmiştir. BTF desteği gerektirir.
+        </div>
+
+        <div class="info-card" style="border-top: 4px solid var(--secondary);">
+            <h4 class="en">🔧 Important Settings</h4>
+            <h4 class="tr">🔧 Önemli Ayarlar</h4>
+            <p class="en">Do not forget to update the backend IP address and adjust <code>exclude_ips</code> and <code>exclude_port</code> fields in the agent YAML according to your specific environment:</p>
+            <p class="tr">Ajan YAML yapılandırmasındaki backend IP adresini güncellemeyi unutmayın ve <code>exclude_ips</code> ve <code>exclude_port</code> alanlarını kendi ortamınıza göre ayarlayın:</p>
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>http_endpoint: "BACKEND_IP:8686"</code></pre>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h5 class="en" style="color: var(--primary);">Network Specific Recommendations:</h5>
+                <h5 class="tr" style="color: var(--primary);">Ağa Özgü Öneriler:</h5>
+                <ul class="en" style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                    <li><strong>If using Flannel:</strong> CIDR: <code>10.244.0.0/16</code> (Exclude IPs ending with .0 and .1)</li>
+                    <li><strong>If using Cilium:</strong> Exclude the <code>cilium_host</code> interface IP.</li>
+                </ul>
+                <ul class="tr" style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                    <li><strong>Flannel kullanıyorsanız:</strong> CIDR: <code>10.244.0.0/16</code> (.0 ve .1 ile biten IP adreslerini hariç tutun)</li>
+                    <li><strong>Cilium kullanıyorsanız:</strong> <code>cilium_host</code> arayüz (interface) IP adresini hariç tutun.</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="en" style="margin-top: 2rem;">Apply the agent to your cluster directly from the remote raw URL after you've prepared an updated config map, or point it directly if using default configurations:</p>
+        <p class="tr" style="margin-top: 2rem;">Yapılandırmalarınızı barındıran ConfigMap'i kurduktan sonra doğrudan uzak raw URL'yi kullanarak ajanı kümeye kurun:</p>
+        <div class="info-card">
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>kubectl apply -f https://raw.githubusercontent.com/capta1nBee/poyrazk8s/main/deploy/network-agent/network-agent.yaml</code></pre>
+            </div>
+        </div>
+
+        <h3 class="en" style="margin-top: 3rem;">Step 5: Security Agent Setup</h3>
+        <h3 class="tr" style="margin-top: 3rem;">Adım 5: Güvenlik Ajanı Kurulumu</h3>
+
+        <div class="alert en" style="border-left: 4px solid var(--warning); padding: 1rem; background: var(--card-bg); margin-bottom: 1.5rem;">
+            <strong>Note:</strong> Tested on Kernel 5.8 and above.
+        </div>
+        <div class="alert tr" style="border-left: 4px solid var(--warning); padding: 1rem; background: var(--card-bg); margin-bottom: 1.5rem;">
+            <strong>Not:</strong> Kernel 5.8 ve üzeri ile test edilmiştir.
+        </div>
+
+        <div class="info-card" style="border-top: 4px solid var(--danger);">
+            <h4 class="en">⚠️ Important Settings</h4>
+            <h4 class="tr">⚠️ Önemli Ayarlar</h4>
+            <p class="en">Ensure the API key perfectly matches the one you specified in `compose.yaml`. Also, update the backend base URL in the ConfigMap:</p>
+            <p class="tr">API anahtarının `compose.yaml` içerisinde belirttiğinizle tamamen eşleştiğinden emin olun. Ayrıca ConfigMap içindeki backend base URL'sini güncelleyin:</p>
+            
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>BACKEND__BASE_URL: "http://BACKEND_IP:8686"
+BACKEND__AGENT_API_KEY: "&lt;YOUR_API_KEY&gt;"</code></pre>
+            </div>
+        </div>
+
+        <h4 class="en" style="margin-top: 2rem; margin-bottom: 1rem;">Installation</h4>
+        <h4 class="tr" style="margin-top: 2rem; margin-bottom: 1rem;">Kurulum</h4>
+        <div class="info-card">
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>kubectl apply -f https://raw.githubusercontent.com/capta1nBee/poyrazk8s/main/deploy/security-agent/security-agent.yaml</code></pre>
+            </div>
+        </div>
+        
+        <div class="info-card" style="border-top: 4px solid var(--accent); margin-top: 2rem;">
+            <h4 class="en">📝 Operational Notes</h4>
+            <h4 class="tr">📝 İşletim Notları</h4>
+            <ul class="en" style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                <li>Ensure your kernel version is <strong>5.8 or higher</strong>.</li>
+                <li>Update all IP addresses and ports according to your specific environment.</li>
+                <li>Make sure agents can seamlessly communicate with the backend service over firewalls.</li>
+            </ul>
+            <ul class="tr" style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                <li>Çekirdek (kernel) sürümünüzün <strong>5.8 veya üzerinde</strong> olduğundan emin olun.</li>
+                <li>Tüm IP adreslerini ve portlarını ortamınıza göre ayarladığınızdan emin olun.</li>
+                <li>Ajanların güvenlik duvarı kuralları (firewall) veya benzeri engellere takılmadan backend servisi ile iletişim kurabildiğinden emin olun.</li>
+            </ul>
+        </div>
+
+        <h3 class="en" style="margin-top: 3rem;">Step 6: Access the Platform</h3>
+        <h3 class="tr" style="margin-top: 3rem;">Adım 6: Platforma Erişim</h3>
+
+        <div class="grid-2">
+            <div class="info-card" style="border-top: 4px solid var(--primary);">
+                <h4 class="en">🌐 Frontend Dashboard</h4>
+                <h4 class="tr">🌐 Frontend Kontrol Paneli</h4>
+                <p class="en">Access the web interface:</p>
+                <p class="tr">Web arayüzüne erişin:</p>
+                <code>http://localhost:8787</code>
+                <p class="en" style="margin-top: 1rem; font-size: 0.9rem;">Default credentials: admin / admin123</p>
+                <p class="tr" style="margin-top: 1rem; font-size: 0.9rem;">Varsayılan kimlik bilgileri: admin / admin123</p>
+            </div>
+            <div class="info-card" style="border-top: 4px solid var(--secondary);">
+                <h4 class="en">🔧 Backend API</h4>
+                <h4 class="tr">🔧 Backend API</h4>
+                <p class="en">Direct API access:</p>
+                <p class="tr">Doğrudan API erişimi:</p>
+                <code>http://localhost:8686</code>
+                <p class="en" style="margin-top: 1rem; font-size: 0.9rem;">API Documentation: /swagger-ui.html</p>
+                <p class="tr" style="margin-top: 1rem; font-size: 0.9rem;">API Dokümantasyonu: /swagger-ui.html</p>
+            </div>
+        </div>
+
+        <h3 class="en">Verification Steps</h3>
+        <h3 class="tr">Doğrulama Adımları</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Component</th><th class="tr">Bileşen</th>
+                        <th class="en">Check Command</th><th class="tr">Kontrol Komutu</th>
+                        <th class="en">Expected Status</th><th class="tr">Beklenen Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="en">Docker Services</span><span class="tr">Docker Servisleri</span></td>
+                        <td><code>docker-compose ps</code></td>
+                        <td><span class="en">All containers running</span><span class="tr">Tüm konteynerler çalışıyor</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="en">Network Agents</span><span class="tr">Ağ Ajanları</span></td>
+                        <td><code>kubectl get pods -n poyraz-network-observability</code></td>
+                        <td><span class="en">All pods ready</span><span class="tr">Tüm pod'lar hazır</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="en">Runtime Agents</span><span class="tr">Runtime Ajanları</span></td>
+                        <td><code>kubectl get pods -n poyraz-runtime-security</code></td>
+                        <td><span class="en">All pods ready</span><span class="tr">Tüm pod'lar hazır</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-card" style="border-top: 4px solid var(--accent); margin: 3rem 0;">
+            <h4 class="en">🚀 Next Steps</h4>
+            <h4 class="tr">🚀 Sonraki Adımlar</h4>
+            <p class="en">• Configure <a href="network-config.html">Network Agent Settings</a><br>• Set up <a href="runtime-config.html">Runtime Security Rules</a><br>• Explore <a href="install.html">Advanced Configuration</a></p>
+            <p class="tr">• <a href="network-config.html">Ağ Ajanı Ayarlarını</a> yapılandırın<br>• <a href="runtime-config.html">Runtime Güvenlik Kurallarını</a> ayarlayın<br>• <a href="install.html">Gelişmiş Yapılandırmayı</a> keşfedin</p>
+        </div>
+
+        <script>
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            btnEn.onclick = () => setLang('en');
+            btnTr.onclick = () => setLang('tr');
+
+            // Copy to clipboard functionality
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.onclick = () => {
+                    const container = button.parentElement;
+                    const code = container.querySelector('code') || container.querySelector('pre');
+                    const text = code.innerText;
+
+                    navigator.clipboard.writeText(text).then(() => {
+                        button.innerText = 'Copied!';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.innerText = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    });
+                };
+            });
+        </script>
+    </main>
+</body>
+</html>

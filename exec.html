@@ -113,18 +113,47 @@
             <img src="image/exec.png" alt="Terminal Exec Error Blocked">
         </div>
 
+        <h3 class="en">Role-Based Command Authorization</h3>
+        <h3 class="tr">Rol Tabanlı Komut Yetkilendirme</h3>
+
+        <p class="en">Configure precise command execution policies using RegEx patterns. Each role can be assigned specific command whitelists, ensuring users can only execute authorized commands within their permission scope.</p>
+        <p class="tr">RegEx desenleri kullanarak hassas komut yürütme politikalarını yapılandırın. Her role belirli komut beyaz listeleri atanabilir, böylece kullanıcıların yalnızca yetki kapsamları dahilindeki yetkili komutları çalıştırmalarını sağlar.</p>
+
+        <div class="media-container" style="border-color: var(--primary);">
+            <img src="image/exec-allow.png" alt="Exec Allow Configuration Interface">
+        </div>
+
+        <div class="media-container" style="border-color: var(--secondary);">
+            <img src="image/exec-allow-2.png" alt="Exec Allow Rules Management">
+        </div>
+
+        <h4 class="en" style="color: var(--warning); margin: 2rem 0 1rem;">Advanced Security Features</h4>
+        <h4 class="tr" style="color: var(--warning); margin: 2rem 0 1rem;">Gelişmiş Güvenlik Özellikleri</h4>
+
         <div class="grid-2">
-            <div class="info-card">
+            <div class="info-card" style="border-top: 4px solid var(--danger);">
                 <h4 class="en">The Great Firewall</h4>
                 <h4 class="tr">Büyük Güvenlik Duvarı</h4>
-                <p class="en" style="font-size:1rem; margin:0;">Uses defensive normalization to split pipes (<code>|</code>) and explicitly blocks shell operators like <code>; & > &lt; ` $ ||</code> before execution ever reaches the Kubernetes API.</p>
-                <p class="tr" style="font-size:1rem; margin:0;">Boru (pipe <code>|</code>) karakterlerini ayırmak için savunmacı bir normalizasyon kullanır ve K8s API'ye ulaşmadan önce <code>; & > &lt; ` $ ||</code> gibi kabuk operatörlerini açıkça engeller.</p>
+                <p class="en" style="font-size:1rem; margin:0;">Uses defensive normalization to split pipes (<code>|</code>) and explicitly blocks shell operators like <code>; & > &lt; ` $ ||</code> before execution ever reaches the Kubernetes API. All commands are sanitized and validated against security patterns.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Boru (pipe <code>|</code>) karakterlerini ayırmak için savunmacı bir normalizasyon kullanır ve K8s API'ye ulaşmadan önce <code>; & > &lt; ` $ ||</code> gibi kabuk operatörlerini açıkça engeller. Tüm komutlar güvenlik desenlerine karşı temizlenir ve doğrulanır.</p>
             </div>
-            <div class="info-card">
-                <h4 class="en">Casbin Policy Linking</h4>
-                <h4 class="tr">Casbin Politika Bağlantısı</h4>
-                <p class="en" style="font-size:1rem; margin:0;">Roles define strictly which regex patterns are allowed. If the parsed base command does not match an allowed pattern in the database, it rejects.</p>
-                <p class="tr" style="font-size:1rem; margin:0;">Roller, hangi regex pattern'lerinin izin verildiğini kesin olarak tanımlar. Ayrıştırılan temel komut veritabanındaki izin verilen pattern listesi ile eşleşmezse, (istek) reddedilir.</p>
+            <div class="info-card" style="border-top: 4px solid var(--primary);">
+                <h4 class="en">Casbin Policy Engine</h4>
+                <h4 class="tr">Casbin Politika Motoru</h4>
+                <p class="en" style="font-size:1rem; margin:0;">Integrates with Casbin RBAC system for fine-grained permission control. Roles define strictly which regex patterns are allowed. If the parsed base command does not match an allowed pattern, it rejects immediately with detailed audit logging.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">İnce ayrıntılı izin kontrolü için Casbin RBAC sistemi ile entegre olur. Roller, hangi regex pattern'lerinin izin verildiğini kesin olarak tanımlar. Ayrıştırılan temel komut izin verilen pattern ile eşleşmezse, detaylı denetim kaydı ile hemen reddeder.</p>
+            </div>
+            <div class="info-card" style="border-top: 4px solid var(--secondary);">
+                <h4 class="en">Real-time Monitoring</h4>
+                <h4 class="tr">Gerçek Zamanlı İzleme</h4>
+                <p class="en" style="font-size:1rem; margin:0;">Every exec session is monitored and logged in real-time. Failed authorization attempts trigger immediate alerts, and all successful commands are recorded with full context including user, role, timestamp, and command parameters.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Her exec oturumu gerçek zamanlı olarak izlenir ve kaydedilir. Başarısız yetkilendirme girişimleri anında uyarı tetikler ve tüm başarılı komutlar kullanıcı, rol, zaman damgası ve komut parametreleri dahil tam bağlamla kaydedilir.</p>
+            </div>
+            <div class="info-card" style="border-top: 4px solid var(--accent);">
+                <h4 class="en">Zero-Trust Architecture</h4>
+                <h4 class="tr">Sıfır Güven Mimarisi</h4>
+                <p class="en" style="font-size:1rem; margin:0;">Assumes no implicit trust. Every command request goes through multiple validation layers: syntax analysis, pattern matching, role verification, and runtime security checks before being permitted to execute.</p>
+                <p class="tr" style="font-size:1rem; margin:0;">Örtük güven varsaymaz. Her komut isteği yürütülmeye izin verilmeden önce birden çok doğrulama katmanından geçer: söz dizimi analizi, desen eşleştirme, rol doğrulama ve çalışma zamanı güvenlik kontrolleri.</p>
             </div>
         </div>
     </main>

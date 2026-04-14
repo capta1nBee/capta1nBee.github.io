@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Agent Configuration - Poyraz K8s Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedLang = localStorage.getItem('poyraz-lang') || 'en';
+            setLang(savedLang);
+        });
+        function setLang(lang) {
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            const enElements = document.querySelectorAll('.en');
+            const trElements = document.querySelectorAll('.tr');
+            
+            if (lang === 'en') {
+                if(btnEn) btnEn.classList.add('active');
+                if(btnTr) btnTr.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'inline-block');
+                trElements.forEach(el => el.style.display = 'none');
+                document.body.setAttribute('data-lang', 'en');
+            } else {
+                if(btnTr) btnTr.classList.add('active');
+                if(btnEn) btnEn.classList.remove('active');
+                enElements.forEach(el => el.style.display = 'none');
+                trElements.forEach(el => el.style.display = 'inline-block');
+                document.body.setAttribute('data-lang', 'tr');
+            }
+            localStorage.setItem('poyraz-lang', lang);
+        }
+    </script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside>
+        <a href="environments.html" class="brand">
+            <svg width="34" height="34" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="8" stroke="var(--primary)" stroke-width="2.5"/><path d="M16 10V22M10 16H22" stroke="var(--secondary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span>POYRAZ K8S</span>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-label en">Core Setup</div>
+            <div class="nav-label tr">Temel Kurulum</div>
+            <a href="environments.html" class="nav-link">
+                <span class="en">Environments</span><span class="tr">Ortamlar</span>
+            </a>
+            <a href="quick-install.html" class="nav-link">
+                <span class="en">Quick Install</span><span class="tr">Hızlı Kurulum</span>
+            </a>
+            <a href="install.html" class="nav-link">
+                <span class="en">Detailed Install</span><span class="tr">Detaylı Kurulum</span>
+            </a>
+            <a href="backup.html" class="nav-link">
+                <span class="en">Backup</span><span class="tr">Yedekleme</span>
+            </a>
+            <a href="federation.html" class="nav-link">
+                <span class="en">Federation</span><span class="tr">Federasyon</span>
+            </a>
+            <a href="rbac.html" class="nav-link">
+                <span class="en">Casbin RBAC</span><span class="tr">Casbin Yetki</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Agent Configuration</div>
+            <div class="nav-label tr">Ajan Yapılandırması</div>
+            <a href="network-config.html" class="nav-link active">
+                <span class="en">Network Agent Config</span><span class="tr">Ağ Ajanı Yapılandırması</span>
+            </a>
+            <a href="runtime-config.html" class="nav-link">
+                <span class="en">Runtime Agent Config</span><span class="tr">Runtime Ajanı Yapılandırması</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Platform Management</div>
+            <div class="nav-label tr">Platform Yönetimi</div>
+            <a href="helm.html" class="nav-link">
+                <span class="en">Helm Ecosystem</span><span class="tr">Helm Ekosistemi</span>
+            </a>
+            <a href="appcreator.html" class="nav-link">
+                <span class="en">App Creator</span><span class="tr">App Oluşturucu</span>
+            </a>
+            <a href="config-sync.html" class="nav-link">
+                <span class="en">Config & Secrets</span><span class="tr">Config & Secret</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Security Intelligence</div>
+            <div class="nav-label tr">Güvenlik İstihbaratı</div>
+            <a href="vuln-scan.html" class="nav-link">
+                <span class="en">Vuln Scanner</span><span class="tr">Zafiyet Tarama</span>
+            </a>
+            <a href="cluster-eye.html" class="nav-link">
+                <span class="en">Cluster Eye</span><span class="tr">Cluster Eye</span>
+            </a>
+            <a href="exec.html" class="nav-link">
+                <span class="en">Terminal Exec</span><span class="tr">Terminal Komut</span>
+            </a>
+            <a href="exec-recorder.html" class="nav-link">
+                <span class="en">Exec Recorder</span><span class="tr">Komut Kaydedici</span>
+            </a>
+            <a href="network-flow.html" class="nav-link">
+                <span class="en">Network Flow</span><span class="tr">Ağ Akışı</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label en">Analytics & Insights</div>
+            <div class="nav-label tr">Analitik ve İçgörüler</div>
+            <a href="report.html" class="nav-link">
+                <span class="en">Reports</span><span class="tr">Raporlar</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-wrapper">
+        <div class="sticky-header">
+            <div class="en" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOCUMENTATION HUB V7.0</div>
+            <div class="tr" style="color: var(--text-dim); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.15em;">DOKÜMANTASYON MERKEZİ V7.0</div>
+            <div class="lang-control">
+                <button id="btn-en" class="lang-btn active">EN</button>
+                <button id="btn-tr" class="lang-btn">TR</button>
+            </div>
+        </div>
+
+        <h1 class="en">Network Agent <span>Configuration</span></h1>
+        <h1 class="tr">Ağ Ajanı <span>Yapılandırması</span></h1>
+
+        <p class="en" style="font-size:1.2rem;">Configure the eBPF network monitoring agent that captures real-time TCP/UDP traffic flows across your Kubernetes cluster. This agent uses the poyraz-network-observability ConfigMap for all settings.</p>
+        <p class="tr" style="font-size:1.2rem;">Kubernetes kümenizde gerçek zamanlı TCP/UDP trafik akışlarını yakalayan eBPF ağ izleme ajanını yapılandırın. Bu ajan tüm ayarlar için poyraz-network-observability ConfigMap'ini kullanır.</p>
+
+        <div class="info-card" style="border-top: 4px solid var(--warning);">
+            <h4 class="en">⚠️ Kernel Requirements</h4>
+            <h4 class="tr">⚠️ Çekirdek Gereksinimleri</h4>
+            <p class="en"><strong>Kernel 5.8+</strong> has been tested and is recommended for optimal performance. Earlier kernel versions may work but are not officially supported.</p>
+            <p class="tr"><strong>Kernel 5.8+</strong> test edilmiş ve optimal performans için önerilir. Önceki çekirdek sürümleri çalışabilir ancak resmi olarak desteklenmez.</p>
+        </div>
+
+        <h3 class="en">ConfigMap Overview</h3>
+        <h3 class="tr">ConfigMap Genel Bakış</h3>
+
+        <p class="en">The network agent reads its configuration from the <code>http-tracer-config</code> ConfigMap in the <code>poyraz-network-observability</code> namespace. This YAML-based configuration controls interface monitoring, traffic filtering, and data export settings.</p>
+        <p class="tr">Ağ ajanı yapılandırmasını <code>poyraz-network-observability</code> namespace'indeki <code>http-tracer-config</code> ConfigMap'inden okur. Bu YAML tabanlı yapılandırma, arayüz izleme, trafik filtreleme ve veri dışa aktarma ayarlarını kontrol eder.</p>
+
+        <h3 class="en">Interface Configuration</h3>
+        <h3 class="tr">Arayüz Yapılandırması</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Mechanism</th><th class="tr">Mekanizma</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>interfaces</code></td>
+                        <td><span class="en">List of network interfaces to attach eBPF probes. Supports wildcards (e.g., <code>lxc*</code>).</span><span class="tr">eBPF problarının bağlanacağı ağ arayüzlerinin listesi. Joker karakterleri destekler (örn. <code>lxc*</code>).</span></td>
+                        <td><span class="en">eBPF XDP/TC Attachment</span><span class="tr">eBPF XDP/TC Bağlantısı</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-card">
+            <pre><code>interfaces:
+  - name: "lxc*"     # Container interfaces
+  - name: "cil*"     # Cilium interfaces
+  - name: "ens192"   # Physical interface
+  - name: "cni0"     # CNI bridge</code></pre>
+        </div>
+
+        <h3 class="en">Traffic Filtering</h3>
+        <h3 class="tr">Trafik Filtreleme</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Filter</th><th class="tr">Filtre</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>exclude_port</code></td>
+                        <td><span class="en">Suppress monitoring for specific TCP/UDP ports.</span><span class="tr">Belirli TCP/UDP portları için izlemeyi durdur.</span></td>
+                        <td><code>[]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>exclude_ips</code></td>
+                        <td><span class="en">List of CIDR blocks or single IPs to ignore.</span><span class="tr">Yoksayılacak CIDR bloklarının veya tekil IP'lerin listesi.</span></td>
+                        <td><code>[]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>exclude_tcp_flags</code></td>
+                        <td><span class="en">Skip monitoring for specific TCP control flags.</span><span class="tr">Belirli TCP kontrol bayrakları için izlemeyi atla.</span></td>
+                        <td><code>[]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>exclude_namespaces</code></td>
+                        <td><span class="en">Ignore traffic from pods in these Kubernetes namespaces.</span><span class="tr">Bu Kubernetes namespace'lerindeki pod'lardan gelen trafiği yoksay.</span></td>
+                        <td><code>["kube-system"]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>exclude_pod_prefixes</code></td>
+                        <td><span class="en">Filter out pods whose names start with these prefixes.</span><span class="tr">İsimleri bu ön eklerle başlayan pod'ları filtrele.</span></td>
+                        <td><code>[]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>only_kubernetes_pod_ips</code></td>
+                        <td><span class="en">If true, captures traffic only if the source or destination is a known Pod IP.</span><span class="tr">Doğruysa, yalnızca kaynak veya hedef bilinen bir Pod IP'si ise trafiği yakalar.</span></td>
+                        <td><code>false</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>only_kubernetes_service_ips</code></td>
+                        <td><span class="en">If true, captures traffic only involving Kubernetes Service (ClusterIP) addresses.</span><span class="tr">Doğruysa, yalnızca Kubernetes Servis (ClusterIP) adreslerini içeren trafiği yakalar.</span></td>
+                        <td><code>false</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">IP Exclusion Best Practices</h3>
+        <h3 class="tr">IP Hariç Tutma En İyi Uygulamalar</h3>
+
+        <div class="grid-2">
+            <div class="info-card" style="border-top: 4px solid var(--secondary);">
+                <h4 class="en">🌐 Flannel CNI</h4>
+                <h4 class="tr">🌐 Flannel CNI</h4>
+                <p class="en">If using Flannel, exclude IPs ending with .0 and .1 from your CIDR block to avoid infrastructure noise:</p>
+                <p class="tr">Flannel kullanıyorsanız, altyapı gürültüsünü önlemek için CIDR bloğunuzda .0 ve .1 ile biten IP'leri hariç tutun:</p>
+                <div class="code-container">
+                    <button class="copy-btn">Copy</button>
+                    <pre><code class="en">exclude_ips:
+  - "10.247.0.1/32"
+  - "10.247.1.1/32"
+  - "10.247.2.1/32"
+  - "10.247.3.1/32"
+  - "10.247.0.0/32"
+  - "10.247.1.0/32"</code></pre>
+                </div>
+                <div class="code-container">
+                    <button class="copy-btn">Copy</button>
+                    <pre><code class="tr">exclude_ips:
+  - "10.247.0.1/32"
+  - "10.247.1.1/32"
+  - "10.247.2.1/32"
+  - "10.247.3.1/32"
+  - "10.247.0.0/32"
+  - "10.247.1.0/32"</code></pre>
+                </div>
+            </div>
+            <div class="info-card" style="border-top: 4px solid var(--primary);">
+                <h4 class="en">🔷 Cilium CNI</h4>
+                <h4 class="tr">🔷 Cilium CNI</h4>
+                <p class="en">For Cilium, exclude cilium_host interface IPs to reduce system traffic monitoring:</p>
+                <p class="tr">Cilium için, sistem trafiği izlemeyi azaltmak için cilium_host arayüz IP'lerini hariç tutun:</p>
+                <div class="code-container">
+                    <button class="copy-btn">Copy</button>
+                    <pre><code class="en"># Find cilium_host IPs with:
+# ip addr show cilium_host
+exclude_ips:
+  - "10.245.1.87/32"  # cilium_host IP</code></pre>
+                </div>
+                <div class="code-container">
+                    <button class="copy-btn">Copy</button>
+                    <pre><code class="tr"># cilium_host IP'lerini şununla bulun:
+# ip addr show cilium_host
+exclude_ips:
+  - "10.245.1.87/32"  # cilium_host IP</code></pre>
+                </div>
+                <p class="en" style="margin-top: 1rem; font-size: 0.9rem;">Example cilium_host interface:</p>
+                <p class="tr" style="margin-top: 1rem; font-size: 0.9rem;">Örnek cilium_host arayüzü:</p>
+                <div class="code-container">
+                    <button class="copy-btn">Copy</button>
+                    <pre><code>cilium_host: flags=4291&lt;UP,BROADCAST,RUNNING,NOARP,MULTICAST&gt;  mtu 1450
+        inet 10.245.1.87  netmask 255.255.255.255</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="en">Kubernetes Integration Settings</h3>
+        <h3 class="tr">Kubernetes Entegrasyon Ayarları</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>kubernetes.enabled</code></td>
+                        <td><span class="en">Toggle K8s metadata enrichment (Pod/Service names).</span><span class="tr">K8s metadata zenginleştirmesini (Pod/Servis isimleri) aç/kapat.</span></td>
+                        <td><code>true</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>kubernetes.config_path</code></td>
+                        <td><span class="en">Path to kubeconfig file (null for in-cluster).</span><span class="tr">Kubeconfig dosyası yolu (küme içi için null).</span></td>
+                        <td><code>null</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>kubernetes.sync_interval</code></td>
+                        <td><span class="en">Refresh rate for Pod/Service IP mapping (seconds).</span><span class="tr">Pod/Servis IP eşlemesi için yenileme hızı (saniye).</span></td>
+                        <td><code>60</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Processing Settings</h3>
+        <h3 class="tr">İşleme Ayarları</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>processing.print_to_console</code></td>
+                        <td><span class="en">Enable/disable flow logging to container stdout.</span><span class="tr">Konteyner stdout'una akış günlüğünü etkinleştir/devre dışı bırak.</span></td>
+                        <td><code>false</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Data Export Configuration</h3>
+        <h3 class="tr">Veri Dışa Aktarma Yapılandırması</h3>
+
+        <div class="data-panel">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="en">Setting</th><th class="tr">Ayar</th>
+                        <th class="en">Description</th><th class="tr">Açıklama</th>
+                        <th class="en">Default</th><th class="tr">Varsayılan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>exporter.enabled</code></td>
+                        <td><span class="en">Enable data export to backend</span><span class="tr">Backend'e veri dışa aktarımını etkinleştir</span></td>
+                        <td><code>true</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>exporter.http_endpoint</code></td>
+                        <td><span class="en">Backend API endpoint (host:port)</span><span class="tr">Backend API uç noktası (host:port)</span></td>
+                        <td><code>backend-ip:8686</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>exporter.buffer_size</code></td>
+                        <td><span class="en">Flow buffer size before sending</span><span class="tr">Göndermeden önce akış tampon boyutu</span></td>
+                        <td><code>100</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>exporter.timeout</code></td>
+                        <td><span class="en">HTTP request timeout (seconds)</span><span class="tr">HTTP istek zaman aşımı (saniye)</span></td>
+                        <td><code>30</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="en">Complete Configuration Example</h3>
+        <h3 class="tr">Tam Yapılandırma Örneği</h3>
+
+        <div class="info-card">
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>config.yaml: |
+    interfaces:
+      - name: "lxc*"
+      - name: "cil*"
+      - name: "ens192"
+      - name: "cni0"
+    filters:
+      exclude_port:
+        - "1025"
+      exclude_ips: 
+        - "10.245.0.114/32"
+        - "10.245.2.107/32" 
+        - "10.245.3.35/32"
+        - "10.245.1.87/32"
+        - "10.247.0.1/32"
+        - "10.247.1.1/32"
+        - "10.247.2.1/32"
+        - "10.247.3.1/32"
+        - "10.247.4.1/32"
+        - "10.247.5.1/32"
+        - "10.247.6.1/32"
+        - "10.247.7.1/32"
+        - "10.247.8.1/32"
+        - "10.247.9.1/32"
+        - "10.247.10.1/32"
+        - "10.247.11.1/32"
+        - "10.247.12.1/32"
+        - "10.247.13.1/32"
+        - "10.247.14.1/32"
+        - "10.247.15.1/32"
+        - "10.247.16.1/32"
+        - "10.247.17.1/32"
+        - "10.247.18.1/32"
+        - "10.247.0.0/32"
+        - "10.247.1.0/32"
+        - "10.247.2.0/32"
+        - "10.247.3.0/32"
+        - "10.247.4.0/32"
+        - "10.247.5.0/32"
+        - "10.247.6.0/32"
+        - "10.247.7.0/32"
+        - "10.247.8.0/32"
+        - "10.247.9.0/32"
+        - "10.247.10.0/32"
+        - "10.247.11.0/32"
+        - "10.247.12.0/32"
+        - "10.247.13.0/32"
+        - "10.247.14.0/32"
+        - "10.247.15.0/32"
+        - "10.247.16.0/32"
+        - "10.247.17.0/32"
+        - "10.247.18.0/32" 
+      exclude_tcp_flags: []
+      exclude_namespaces: ["kube-system"]
+      exclude_pod_prefixes: ["rook-", "jaeger-"]
+      only_kubernetes_pod_ips: false
+      only_kubernetes_service_ips: false
+    
+    kubernetes:
+      enabled: true
+      config_path: null
+      sync_interval: 60
+    
+    processing:
+      print_to_console: false
+    
+    exporter:
+      enabled: true
+      http_endpoint: "10.200.63.202:8686"
+      buffer_size: 100
+      timeout: 30</code></pre>
+            </div>
+        </div>
+
+        <div class="info-card" style="border-top: 4px solid var(--accent);">
+            <h4 class="en">🚀 Applying Configuration</h4>
+            <h4 class="tr">🚀 Yapılandırmayı Uygulama</h4>
+            <p class="en">After modifying the configuration, restart the agent pods to apply changes:</p>
+            <p class="tr">Yapılandırmayı değiştirdikten sonra, değişiklikleri uygulamak için ajan pod'larını yeniden başlatın:</p>
+            <div class="code-container">
+                <button class="copy-btn">Copy</button>
+                <pre><code>kubectl rollout restart daemonset/http-tracer -n poyraz-network-observability</code></pre>
+            </div>
+        </div>
+
+        <script>
+            const btnEn = document.getElementById('btn-en');
+            const btnTr = document.getElementById('btn-tr');
+            btnEn.onclick = () => setLang('en');
+            btnTr.onclick = () => setLang('tr');
+
+            // Copy to clipboard functionality
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.onclick = () => {
+                    const container = button.parentElement;
+                    const code = container.querySelector('code') || container.querySelector('pre');
+                    const text = code.innerText;
+
+                    navigator.clipboard.writeText(text).then(() => {
+                        button.innerText = 'Copied!';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.innerText = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    });
+                };
+            });
+        </script>
+    </main>
+</body>
+</html>
